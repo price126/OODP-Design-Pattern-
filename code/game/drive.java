@@ -1,5 +1,6 @@
-package bowling;
+package game;
 
+import bowling.Alley;
 import control.ControlDesk;
 import viewer.ControlDeskView;
 
