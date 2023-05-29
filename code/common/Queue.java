@@ -10,8 +10,8 @@ package common;/* common.Queue.java
 
 import java.util.Vector;
 
-public class Queue {
-    private final Vector v;
+public class Queue<E> {
+    private final Vector<E> v;
 
     /**
      * common.Queue()
@@ -19,14 +19,14 @@ public class Queue {
      * creates a new queue
      */
     public Queue() {
-        v = new Vector();
+        v = new Vector<>();
     }
 
-    public Object next() {
+    public E next() {
         return v.remove(0);
     }
 
-    public void add(Object o) {
+    public void add(E o) {
         v.addElement(o);
     }
 
@@ -34,7 +34,7 @@ public class Queue {
         return v.size() != 0;
     }
 
-    public Vector asVector() {
+    public Vector<E> asVector() {
         return v;
     }
 
