@@ -13,7 +13,7 @@ package user;/*
  *     *** empty log message ***
  *
  *     Revision 1.1  2003/01/12 19:09:12  ???
- *     Adding user.Party, bowling.Lane, Bowler, and bowling.Alley.
+ *     Adding user.Party, lane.Lane, Bowler, and lane.Alley.
  *
  */
 

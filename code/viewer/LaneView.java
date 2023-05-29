@@ -1,11 +1,11 @@
 package viewer;/*
- *  constructs a prototype bowling.Lane View
+ *  constructs a prototype lane.Lane View
  *
  */
 
-import bowling.Lane;
-import bowling.LaneEvent;
-import bowling.LaneObserver;
+import lane.Lane;
+import lane.LaneEvent;
+import lane.LaneObserver;
 import user.Bowler;
 import user.Party;
 
@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -45,7 +44,7 @@ public class LaneView implements LaneObserver, ActionListener {
         this.lane = lane;
 
         initDone = true;
-        frame = new JFrame("bowling.Lane " + laneNum + ":");
+        frame = new JFrame("lane.Lane " + laneNum + ":");
         cpanel = frame.getContentPane();
         cpanel.setLayout(new BorderLayout());
 

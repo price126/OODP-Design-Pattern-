@@ -1,10 +1,10 @@
-package bowling;/*  $Id$
+package game;/*  $Id$
  *
  *  Revisions:
- *    $Log: bowling.PinsetterEvent.java,v $
+ *    $Log: game.PinsetterEvent.java,v $
  *    Revision 1.2  2003/01/26 22:34:44  ???
  *    Total rewrite of lane and pinsetter for R2's observer model
- *    Added bowling.Lane/bowling.Pinsetter Observer
+ *    Added lane.Lane/game.Pinsetter Observer
  *    Rewrite of scoring algorythm in lane
  *
  *    Revision 1.1  2003/01/19 21:04:24  ???
@@ -20,7 +20,7 @@ public class PinsetterEvent {
     private final int pinsDownThisThrow;
 
     /**
-     * bowling.PinsetterEvent()
+     * game.PinsetterEvent()
      * <p>
      * creates a new pinsetter event
      *

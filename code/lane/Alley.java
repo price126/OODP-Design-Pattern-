@@ -1,11 +1,11 @@
-package bowling;/*
- * bowling.Alley.java
+package lane;/*
+ * lane.Alley.java
  *
  * Version:
  *   $Id$
  *
  * Revisions:
- *   $Log: bowling.Alley.java,v $
+ *   $Log: lane.Alley.java,v $
  *   Revision 1.4  2003/02/02 20:28:58  ???
  *   fixed sleep thread bug in lane
  *
@@ -16,7 +16,7 @@ package bowling;/*
  *   *** empty log message ***
  *
  *   Revision 1.1  2003/01/12 19:09:12  ???
- *   Adding user.Party, bowling.Lane, Bowler, and bowling.Alley.
+ *   Adding user.Party, lane.Lane, Bowler, and lane.Alley.
  *
  */
 

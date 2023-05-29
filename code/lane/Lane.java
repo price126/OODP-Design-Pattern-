@@ -1,8 +1,8 @@
-package bowling;
+package lane;
 /* $Id$
  *
  * Revisions:
- *   $Log: bowling.Lane.java,v $
+ *   $Log: lane.Lane.java,v $
  *   Revision 1.52  2003/02/20 20:27:45  ???
  *   Fouls disables.
  *
@@ -64,13 +64,13 @@ package bowling;
  *   Still not quite working...
  *
  *   Revision 1.30  2003/02/04 13:33:04  ???
- *   bowling.Lane may very well work now.
+ *   lane.Lane may very well work now.
  *
  *   Revision 1.29  2003/02/02 23:57:27  ???
  *   fix on pinsetter hack
  *
  *   Revision 1.28  2003/02/02 23:49:48  ???
- *   bowling.Pinsetter generates an event when all pins are reset
+ *   game.Pinsetter generates an event when all pins are reset
  *
  *   Revision 1.27  2003/02/02 23:26:32  ???
  *   ControlDesk now runs its own thread and polls for free lanes to assign queue members to
@@ -79,10 +79,10 @@ package bowling;
  *   parties can now play more than 1 game on a lane, and lanes are properly released after games
  *
  *   Revision 1.25  2003/02/02 22:52:19  ???
- *   bowling.Lane compiles
+ *   lane.Lane compiles
  *
  *   Revision 1.24  2003/02/02 22:50:10  ???
- *   bowling.Lane compiles
+ *   lane.Lane compiles
  *
  *   Revision 1.23  2003/02/02 22:47:34  ???
  *   More observering.
@@ -94,7 +94,7 @@ package bowling;
  *   added conditions for the party choosing to play another game
  *
  *   Revision 1.20  2003/02/02 21:51:54  ???
- *   bowling.LaneEvent may very well be observer method.
+ *   lane.LaneEvent may very well be observer method.
  *
  *   Revision 1.19  2003/02/02 20:28:59  ???
  *   fixed sleep thread bug in lane
@@ -109,7 +109,7 @@ package bowling;
  *   Worked on scoring.
  *
  *   Revision 1.15  2003/01/30 21:45:08  ???
- *   Fixed speling of received in bowling.Lane.
+ *   Fixed speling of received in lane.Lane.
  *
  *   Revision 1.14  2003/01/30 21:29:30  ???
  *   Fixed some MVC stuff
@@ -122,7 +122,7 @@ package bowling;
  *
  *   Revision 1.11  2003/01/26 22:34:44  ???
  *   Total rewrite of lane and pinsetter for R2's observer model
- *   Added bowling.Lane/bowling.Pinsetter Observer
+ *   Added lane.Lane/game.Pinsetter Observer
  *   Rewrite of scoring algorythm in lane
  *
  *   Revision 1.10  2003/01/26 20:44:05  ???
@@ -131,8 +131,11 @@ package bowling;
  *
  */
 
-import game.EndGamePrompt;
-import game.EndGameReport;
+import game.Pinsetter;
+import game.PinsetterEvent;
+import game.PinsetterObserver;
+import viewer.EndGamePrompt;
+import viewer.EndGameReport;
 import game.ScoreHistoryFile;
 import game.ScoreReport;
 import user.Bowler;
@@ -169,7 +172,7 @@ public class Lane extends Thread implements PinsetterObserver {
     private Bowler currentThrower;            // = the thrower who just took a throw
 
     /**
-     * bowling.Lane()
+     * lane.Lane()
      * <p>
      * Constructs a new lane and starts its thread
      *
@@ -614,7 +617,7 @@ public class Lane extends Thread implements PinsetterObserver {
     }
 
     /**
-     * Accessor to get this bowling.Lane's pinsetter
+     * Accessor to get this lane.Lane's pinsetter
      *
      * @return A reference to this lane's pinsetter
      */

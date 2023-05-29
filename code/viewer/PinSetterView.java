@@ -12,8 +12,8 @@ package viewer;/*
  * constructs a prototype PinSetter GUI
  */
 
-import bowling.PinsetterEvent;
-import bowling.PinsetterObserver;
+import game.PinsetterEvent;
+import game.PinsetterObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +43,7 @@ public class PinSetterView implements PinsetterObserver {
 
     public PinSetterView(int laneNum) {
 
-        frame = new JFrame("bowling.Lane " + laneNum + ":");
+        frame = new JFrame("lane.Lane " + laneNum + ":");
 
         Container cpanel = frame.getContentPane();
 

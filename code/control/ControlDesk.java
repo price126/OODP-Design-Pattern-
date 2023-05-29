@@ -24,7 +24,7 @@ package control;/* control.ControlDesk.java
  * 		Updated comments to match javadoc format.
  *
  * 		Revision 1.7  2003/02/02 16:29:52  ???
- * 		Added control.ControlDeskEvent and control.ControlDeskObserver. Updated common.Queue to allow access to Vector so that contents could be viewed without destroying. Implemented observer model for most of control.ControlDesk.
+ * 		Added control.ControlDeskEvent and control.ControlDeskObserver. Updated user.Queue to allow access to Vector so that contents could be viewed without destroying. Implemented observer model for most of control.ControlDesk.
  *
  * 		Revision 1.6  2003/02/02 06:09:39  ???
  * 		Updated many classes to support the ControlDeskView.
@@ -39,8 +39,8 @@ package control;/* control.ControlDesk.java
  * Class that represents control desk
  */
 
-import bowling.Lane;
-import common.Queue;
+import lane.Lane;
+import user.Queue;
 import user.Bowler;
 import user.BowlerFile;
 import user.Party;

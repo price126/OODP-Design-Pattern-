@@ -12,8 +12,7 @@ package viewer;/* ControlDeskView.java
  * Class for representation of the control desk
  */
 
-import bowling.Lane;
-import bowling.Pinsetter;
+import lane.Lane;
 import control.ControlDesk;
 import control.ControlDeskEvent;
 import control.ControlDeskObserver;
@@ -87,10 +86,10 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
         finishedPanel.add(finished);
         controlsPanel.add(finishedPanel);
 
-        // bowling.Lane Status Panel
+        // lane.Lane Status Panel
         JPanel laneStatusPanel = new JPanel();
         laneStatusPanel.setLayout(new GridLayout(numLanes, 1));
-        laneStatusPanel.setBorder(new TitledBorder("bowling.Lane Status"));
+        laneStatusPanel.setBorder(new TitledBorder("lane.Lane Status"));
 
         HashSet lanes = controlDesk.getLanes();
         Iterator it = lanes.iterator();
@@ -101,14 +100,14 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
             curLane.subscribe(laneStat);
             curLane.getPinsetter().subscribe(laneStat);
             JPanel lanePanel = laneStat.showLane();
-            lanePanel.setBorder(new TitledBorder("bowling.Lane" + ++laneCount));
+            lanePanel.setBorder(new TitledBorder("lane.Lane" + ++laneCount));
             laneStatusPanel.add(lanePanel);
         }
 
-        // user.Party common.Queue Panel
+        // user.Party user.Queue Panel
         JPanel partyPanel = new JPanel();
         partyPanel.setLayout(new FlowLayout());
-        partyPanel.setBorder(new TitledBorder("user.Party common.Queue"));
+        partyPanel.setBorder(new TitledBorder("user.Party user.Queue"));
 
         Vector empty = new Vector();
         empty.add("(Empty)");

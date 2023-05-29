@@ -1,4 +1,4 @@
-package common;/* common.Queue.java
+package user;/* user.Queue.java
  *
  *  Version
  *  $Id$
@@ -14,7 +14,7 @@ public class Queue<E> {
     private final Vector<E> v;
 
     /**
-     * common.Queue()
+     * user.Queue()
      * <p>
      * creates a new queue
      */

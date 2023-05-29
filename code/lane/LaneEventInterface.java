@@ -1,4 +1,4 @@
-package bowling;
+package lane;
 
 import user.Bowler;
 import user.Party;

@@ -5,8 +5,12 @@ package viewer; /**
  * Window>Preferences>Java>Code Generation.
  */
 
-import bowling.*;
-import user.Bowler;
+import game.Pinsetter;
+import game.PinsetterEvent;
+import game.PinsetterObserver;
+import lane.Lane;
+import lane.LaneEvent;
+import lane.LaneObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,13 +67,13 @@ public class LaneStatusView implements ActionListener, LaneObserver, PinsetterOb
 
         Insets buttonMargin = new Insets(4, 4, 4, 4);
 
-        viewLane = new JButton("View bowling.Lane");
+        viewLane = new JButton("View lane.Lane");
         JPanel viewLanePanel = new JPanel();
         viewLanePanel.setLayout(new FlowLayout());
         viewLane.addActionListener(this);
         viewLanePanel.add(viewLane);
 
-        viewPinSetter = new JButton("bowling.Pinsetter");
+        viewPinSetter = new JButton("game.Pinsetter");
         JPanel viewPinSetterPanel = new JPanel();
         viewPinSetterPanel.setLayout(new FlowLayout());
         viewPinSetter.addActionListener(this);

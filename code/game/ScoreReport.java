@@ -34,7 +34,7 @@ public class ScoreReport {
         Iterator scoreIt = v.iterator();
 
         content = "";
-        content += "--Lucky Strike Bowling bowling.Alley game.Score Report--\n";
+        content += "--Lucky Strike Bowling lane.Alley game.Score Report--\n";
         content += "\n";
         content += "Report for " + full + ", aka \"" + nick + "\":\n";
         content += "\n";

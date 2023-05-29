@@ -1,6 +1,6 @@
-package game;
+package viewer;
 
-import bowling.Alley;
+import lane.Alley;
 import control.ControlDesk;
 import viewer.ControlDeskView;
 
