@@ -26,7 +26,7 @@ public class BowlerFile {
     /**
      * The location of the bowelr database
      */
-    private static final String BOWLER_DAT = "/Users/sujungnam/IdeaProjects/OODP-Design-Pattern--chore-package-configuration/code/user/BOWLERS.DAT";
+    private static final String BOWLER_DAT = "./code/user/BOWLERS.DAT";
 
     /**
      * Retrieves bowler information from the database and returns a Bowler objects with populated fields.

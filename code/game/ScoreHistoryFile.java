@@ -10,7 +10,7 @@ import java.util.Vector;
 
 public class ScoreHistoryFile {
 
-    private static final String SCOREHISTORY_DAT = "SCOREHISTORY.DAT";
+    private static final String SCOREHISTORY_DAT = "./code/game/SCOREHISTORY.DAT";
 
     public static void addScore(String nick, String date, String score)
             throws IOException {
