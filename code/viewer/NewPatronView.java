@@ -1,19 +1,4 @@
-package viewer;/* viewer.AddPartyView.java
- *
- *  Version
- *  $Id$
- *
- *  Revisions:
- * 		$Log: viewer.NewPatronView.java,v $
- * 		Revision 1.3  2003/02/02 16:29:52  ???
- * 		Added control.ControlDeskEvent and control.ControlDeskObserver. Updated user.Queue to allow access to Vector so that contents could be viewed without destroying. Implemented observer model for most of ControlDesk.
- *
- *
- */
-
-/**
- * Class for GUI components need to add a patron
- */
+package viewer;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -117,14 +102,14 @@ public class NewPatronView implements ActionListener {
         win.setLocation(
                 ((screenSize.width) / 2) - ((win.getSize().width) / 2),
                 ((screenSize.height) / 2) - ((win.getSize().height) / 2));
-        win.show();
+        win.setVisible(true);
 
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(abort)) {
             done = true;
-            win.hide();
+            win.setVisible(false);
         }
 
         if (e.getSource().equals(finished)) {
@@ -133,7 +118,7 @@ public class NewPatronView implements ActionListener {
             email = emailField.getText();
             done = true;
             addParty.updateNewPatron(this);
-            win.hide();
+            win.setVisible(false);
         }
 
     }
