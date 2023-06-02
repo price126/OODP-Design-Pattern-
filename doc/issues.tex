@@ -1,0 +1,212 @@
+\section{Issues with the Old Code}
+
+\subsection{LANE - the "God class"}
+
+The single biggest problem with the original code is the existence of a "God class" - Lane.java. God classes are notorious for violating the foundational principle of software desisn - Single Responsibility Class: whereby each class is supposed to perform only one task in the context of the application, and delegate sub-tasks to other helper classes.
+
+Expectedly enough, when we ran \textrm{cloc} (a CLI utility to count lines of code) on the source code, we found that out of 1814 lines of code (excluding comments), 294 were alone in Lane.java (nearly 17\% of entire project), the maximum among all other classes.
+
+\subsection{Classes with too many fields}
+
+Lane wasn't the only offender in terms of number of properties, there were four other classes: AddPartyView, LaneStatusView, LaneView, and NewPatronView. All of them at least 15 plus properties. Again, since these were view classes, they had \code{several duplicated properties}. We moved those properties to a general \code{Widget.X} class, deleted few useless properties, and overall fixed this code smell.
+
+\subsection{Code repeated throughout codebase}
+
+Quite a lot of code was duplicated line by line through many classes in the codebase, especially in the UI, for example:
+
+\begin{itemize}
+	\item Window centering logic in View class constructors.
+	\item List view scrollable pane, attaching listener, etc.
+	\item Setting up Button Panels inside of Flow and Grid Layouts.
+	\item Getting Date Strings, Waiting for an event, and many more.
+\end{itemize}
+
+Here's a real example form AddPartyView.java:
+
+\begin{verbatim}
+addPatron = new JButton("Add to Party");
+JPanel addPatronPanel = new JPanel();
+addPatronPanel.setLayout(new FlowLayout());
+addPatron.addActionListener(this);
+addPatronPanel.add(addPatron);
+
+remPatron = new JButton("Remove Member");
+JPanel remPatronPanel = new JPanel();
+remPatronPanel.setLayout(new FlowLayout());
+remPatron.addActionListener(this);
+remPatronPanel.add(remPatron);
+
+newPatron = new JButton("New Patron");
+JPanel newPatronPanel = new JPanel();
+newPatronPanel.setLayout(new FlowLayout());
+newPatron.addActionListener(this);
+newPatronPanel.add(newPatron);
+
+finished = new JButton("Finished");
+JPanel finishedPanel = new JPanel();
+finishedPanel.setLayout(new FlowLayout());
+finished.addActionListener(this);
+finishedPanel.add(finished);
+\end{verbatim}
+
+As you can see it is clearly duplicated a lot of times.
+
+Apart from the glaring errors in code redundancy spanning all classes that were fixed by complete restructuing, some code exists which is used by multiple functions but not native to a class in the inteheritance tree. A few examples are writing to a file, or getting the date string. We have made a \textbf{Util class} for all of this, abstracted out the common logic there.
+
+\subsection{Misplaced Observer pattern logic}
+
+\begin{itemize}
+
+	\item Each of the three Controller classes implemented their subscriber logic by using their own \code{subsriber} vector and their own \code{subscribe} method. This was \textbf{duplicated} across all three controllers.
+	\item Moreover, placing Observer pattern logic in the Controller class was a \textbf{semantically poor design choice}, as a Controller's sole purpose is to control observers, and implementing barebone's of Observer goes against this. It is like writing \code{pop} and \code{push} functions of a stack just so that you can use a stack.
+	\item We fixed this by introduing a general \code{Publisher} class.
+
+\end{itemize}
+
+\subsection{Reinventing the wheel}
+
+\begin{itemize}
+	\item The original code wrote its own implementation of a Queue class in Queue.java
+	\item This was completely useless as Java built-in modules already provide several different implementations of a queue.
+	\item Not only that, the original Queue.java was not even \textbf{generified}, instead, it was tied down to a Party class. That meant, the Queue \textbf{wasn't even reusable} for other data types if we wanted to reuse it.
+	\item At first, we generified it, but later we ended up deleting and replacing with a built-in \code{java.util.LinkedList} without any loss of functionality.
+\end{itemize}
+
+\subsection{Excessively high cyclomatic complexity}
+
+Whoever wrote this code was surely a magician, otherwise as it is simply impossible for humans to write a method which has dozens of if-elses and magic constants spread all over it. You may look at \code{private int getScore} in Lane.java if you do not believe us. We shall not reproduce its code here, but rest assured that by looking at, your eyes shall bleed and you shall never be unsee the tyranny of harmless looking if-elses.
+
+We ended up having to rewrite that method from scratch since there was simply no way to determine how it was calculating the score.
+
+This isn't the only method though, you may also look at \code{Lane.run} or \code{Lane.receivePinSetterEvent} or \code{LaneView.receiveLaneEvent}. There are more, but a consistent pattern across them is \textbf{deep nesting of if-elses inside loops or more if-elses}, which evidently increases the complexity manifold.
+
+\subsection{Feature envy}
+
+This is an extremely common code smell, where in the midst of development, developers forget that class A is doing a lot of work from class B, when in fact that work should have been done by class B itself. We identified a few feature envies in different places, such that we count at least three accesses as "repeatedly accessed"
+
+\begin{enumerate}
+	\item Party and Bowler accessed repeatedly in \code{Lane.run}
+	\item Lane accessed repeatedly in \code{LaneStatusView.actionPerformed}: this was actually a simpler case of code duplication unlike others
+	\item Party accessed repeatedly in \code{Lane.assignParty}
+\end{enumerate}
+
+We fixed all such cases by moving the relevant work to that class itself, instead fo calling its methods repeatedly.
+
+\subsection{Minor issues}
+
+There were other minor issues plaguing the codebase, the most common ones are the following. Also note that we have only shown one or two occurrences of these minor issues, however, they occurred much more frequently in the codebase.
+
+\subsubsection{Overly Broad access specifiers}
+
+\begin{itemize}
+
+	\item Many methods and properties \textbf{marked public} without a reason, or if not that, had overly broad access specifiers (package-private instead of private).
+	\item Since most of the code is contained in a package and only the driver should ever need to be called externally, these access specifiers have been changed to \textbf{private where possible}, package-private otherwise, and protected in very few cases (where inheritance from Widget is required).
+\end{itemize}
+
+\subsubsection{Local values stored as class properties}
+
+This pattern is common across files, especially in LaneView.java. Many of the 2D JPanel arrays are not required to be class properties, and could be simply moved to local variables. This corresponds to the principle of \textbf{information hiding}, where only as little information is exposed outside a method as is really necessary.
+
+\subsubsection{Badly Written Loops and Conditionals}
+
+\begin{itemize}
+	\item Many loops used iterators to iterate over vectors. We replaced them with the new for-in loop in Java.
+	\item It has this syntax: \code{for(int value : array)}, which is \textbf{succint and clear} as opposed to the verbose iterator syntax.
+\end{itemize}
+
+\subsubsection{Outdated Vector collection used}
+
+\begin{itemize}
+	\item \code{Vector} had been used throughout the code base to maintain dynamically sized collections of object.
+	\item It is widely known that vectors used synchronous blocking operations and therefore are very slow as compared to their array/\code{ArrayList} counterparts.
+	\item Therefore, we replaced them with ArrayList throughout.
+\end{itemize}
+
+\subsubsection{Comment-based version control}
+
+The files were using a unique approach to version control, namely, putting edit-log comments at the top of each file, timestamped, with "useful" messages like \textit{"Added things"} and \textit{"Works beautifully"} (\textrm{Lane.java}) This comment log sometimes grew to a sprawling size of more than 100 lines (Lane.java: 130+ lines)
+
+As we already know, such a version control is completely useless when compared to Git.
+
+\subsubsection{Useless comments}
+
+Many classes and methods carried useless comments with them. A few actual examples:
+
+\begin{verbatim}
+/**
+ * Class to represent the pinsetter
+ */
+
+class Pinsetter{ ... }
+\end{verbatim}
+
+or this gold comment:
+
+\begin{verbatim}
+	/** Pinsetter()
+	 *
+	 * Constructs a new pinsetter
+	 *
+	 * @pre none
+	 * @post a new pinsetter is created
+	 * @return Pinsetter object
+	 */
+	public Pinsetter() {
+\end{verbatim}
+
+While it can surely be agreed that the comment is correct, it is widely recognized that \textbf{comments suffer from aging}. For example, if the Pinsetter class was renamed, or the constructor was simply moved from its current position in the file to somewhere else, someone may forget to change the comment. Later in time, the comment will definitely not be helpful.
+
+Moreover, it is widely accepted that \textbf{Writing comments is good, but not having to write comments is better.} (\hyperlink{https://softwareengineering.stackexchange.com/a/335513/131646}{read} and \hyperlink{https://www.freecodecamp.org/news/code-comments-the-good-the-bad-and-the-ugly-be9cc65fbf83/}{read}). In general, throughout the codebase, we have removed such useless comments where possible, and retained useful comments where required.
+
+\subsubsection{Bad identifier names}
+
+There were several identifier names that both violated the Camel Case naming format and often used 1 letter names like i. All that has been changed to semantically useful names, then number of these parameters has been drastically reduced, and subsumed in the inheritance heirarchy.
+
+\subsubsection{Magic constants}
+
+Many many magic constants exist throughout the codebase. We can look at makeFrame method in LaneView.java:
+
+\begin{verbatim}
+balls = new JPanel[numBowlers][23];
+ballLabel = new JLabel[numBowlers][23];
+scores = new JPanel[numBowlers][10];
+scoreLabel = new JLabel[numBowlers][10];
+\end{verbatim}
+
+or even at this gold comment in Lane.java:
+
+\begin{verbatim}
+finalScores = new int[party.getMembers().size()][128]; //Hardcoding a max of 128 games, bite me.
+\end{verbatim}
+
+As we know well, magic constants are discouraged throughout industry as they hamper \textbf{reusability} as well as make the codebase \textbf{hard to understand}. We do not know if repeated magic constants refer to the same thing or meant something else. They make things messy, so to speak.
+
+\subsubsection{Semantically incorrect subclassing}
+
+As you can read on \hyperlink{https://stackoverflow.com/questions/541487/implements-runnable-vs-extends-thread-in-java}{Stackoverflow}, since the Lane class is not really specializing any of Thread's behavior by extending it, the original code had two instances of semantically incorrect \code{extends Thread} - ControlDesk and Lane.
+
+\subsubsection{Dependent variables}
+
+There were a handful of instances where two class properties were \textbf{tightly coupled} to each other, such that if you changed any one and forgot to change the other, the entire logic would break. An example would be \code{isPartyAssigned} property in Lane.java, which was always true when \code{party != null} and false otherwise. We had fixed this by replacing the single usage of isPartyAssigned with the above conditonal.
+
+\subsubsection{Incorrect task distribution between classes}
+
+It was quite often the case that some work, that ideally should have been done by one file, was done by another. For example: there are three occurrences of \code{.getNickName() + "'s Party"} throughout the codebase. It's supposed to generate a party's name. Not only is it duplicated, moreover, it is not present inside Party.java. \textbf{The name of the party is being decided by classes other than the Party itself!}
+
+We fixed this by providing a \code{Party.getName()} method, as any sane and logical coder would have done.
+
+
+\subsubsection{Auto-Fixes using the IntelliJ linter}
+
+There are massive fixed using the intelliJ linter primarilty on bad access specifiers, lack of defensive copy, etc. All of that has been fixed. A list of some of them is as follows:
+
+\textbf{'size() == 0' replaceable with 'isEmpty()'}: Using correct API where possible, found in \code{Lane.publish, AddPartyView.actionPerformed}
+
+\textbf{Field may be 'final'}: 	Final fields increase readability of code as we are then sure that the field will not change, found in almost every file
+\textbf{Pointless boolean expression}: Simplificatiotn where possible, found in \code{ControlDesk.assignLane}, etc.
+\textbf{Unused declaration}: Surprisingly many unused variable declarations exist in the original codebase, found in \code{AddPartyView.actionPerformed.newPatron}, etc.
+\textbf{Declaration access can be weaker}: It helps makes sure that the semantic meaning of the classes is clear. Moreover, it helps prevent unintended access of other classes fields, ensuring security as well, found in Almost every file, and everything is public for no reason
+\textbf{Call to simple getter from within class}: Why even do that?!, found in Bowler.equals
+
+\textbf{Method may be 'static'}: Helps clarify what methods need properties and which don't, increases cohesion, found in \code{ControlDesk.registerPatron}
