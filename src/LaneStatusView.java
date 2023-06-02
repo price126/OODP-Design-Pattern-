@@ -1,110 +1,120 @@
-import javax.swing.*;
+/**
+ *
+ * To change this generated comment edit the template variable "typecomment":
+ * Window>Preferences>Java>Templates.
+ * To enable and disable the creation of type comments go to
+ * Window>Preferences>Java>Code Generation.
+ */
+
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.awt.event.*;
+import java.io.Serializable;
+import javax.swing.*;
 
-public class LaneStatusView implements ActionListener, Observer {
+public class LaneStatusView implements Serializable, ActionListener, LaneObserver, PinsetterObserver {
 
-    private final Widget.ButtonPanel buttonPanel;
-    private final Widget.ContainerPanel gamePanel;
+	public final JPanel jp;
 
-    private final JLabel currentBowler;
-    private final JLabel pinsDown;
+	private final JLabel curBowler,pinsDown;
+	private final JButton viewLane,viewPinSetter,maintenance;
 
-    private final PinSetterView pinSetterView;
-    private final LaneView laneView;
-    private final Lane lane;
+	private final PinSetterView psv;
+	private final LaneView lv;
+	private final Lane lane;
+	final int laneNum;
 
-    private final int laneNumber;
+	boolean laneShowing,psShowing;
 
-    LaneStatusView(final Lane lane, final int laneNum) {
-        this.lane = lane;
-        laneNumber = laneNum;
-        pinSetterView = new PinSetterView(laneNum);
-        lane.subscribePinsetter(pinSetterView);
+	public LaneStatusView(Lane lane, int laneNum ) {
 
-        laneView = new LaneView(lane, laneNum);
-        lane.subscribe(laneView);
+		this.lane = lane;
+		this.laneNum = laneNum;
 
-        buttonPanel = new Widget.ButtonPanel("")
-                .put(ButtonNames.BTN_VIEW_LANE, this)
-                .put(ButtonNames.BTN_VIEW_PINSETTER, this)
-                .put(ButtonNames.BTN_MAINTENANCE_SPACE, this)
-                .put(ButtonNames.BTN_PAUSE, this)
-                .put(ButtonNames.BTN_RESUME, this);
-        buttonPanel.get(ButtonNames.BTN_MAINTENANCE_SPACE).setBackground(Color.GREEN);
-        buttonPanel.get(ButtonNames.BTN_VIEW_LANE).setEnabled(false);
-        buttonPanel.get(ButtonNames.BTN_VIEW_PINSETTER).setEnabled(false);
-        buttonPanel.get(ButtonNames.BTN_PAUSE).setEnabled(false);
-        buttonPanel.get(ButtonNames.BTN_RESUME).setEnabled(true);
+		laneShowing=false;
+		psShowing=false;
 
-        currentBowler = new JLabel("(no one)");
-        pinsDown = new JLabel("0");
-        gamePanel = new Widget.ContainerPanel("")
-                .put(new JLabel("Now Bowling: "))
-                .put(currentBowler)
-                .put(new JLabel("Pins Down: "))
-                .put(pinsDown)
-                .put(buttonPanel);
-    }
+		psv = new PinSetterView( laneNum );
+		PinsetterSubscriber.subscribe(lane.setter,psv);
 
-    final JPanel showLane() {
-        return gamePanel.getPanel();
-    }
+		lv = new LaneView( lane, laneNum );
+		LaneSubscriber.subscribe(lane,lv);
 
-    public final void actionPerformed(final ActionEvent e) {
-        final String source = ((AbstractButton) e.getSource()).getText();
-        if (lane.isPartyAssigned()) {
-            switch (source) {
-                case ButtonNames.BTN_VIEW_PINSETTER:
-                    pinSetterView.toggleVisible();
-                    break;
-                case ButtonNames.BTN_VIEW_LANE:
-                    laneView.toggleVisible();
-                    break;
-                case ButtonNames.BTN_MAINTENANCE_SPACE:
-                    lane.pauseGame(false);
-                    buttonPanel.get(ButtonNames.BTN_MAINTENANCE_SPACE).setBackground(Color.GREEN);
-                    break;
-            }
-        }
-        if (source.equals(ButtonNames.BTN_RESUME)) {
-            final String fileName = Util.getFileName(gamePanel.getPanel());
-            lane.loadState(fileName);
-            lane.pauseManual(false);
-        } else if (source.equals(ButtonNames.BTN_PAUSE)) {
-            lane.pauseManual(true);
-            buttonPanel.get(ButtonNames.BTN_RESUME).setEnabled(true);
-            buttonPanel.get(ButtonNames.BTN_PAUSE).setEnabled(false);
-            final String saveFile  = "Datastore/lane" + laneNumber + "_on_" + Util.getDateIdentifier() + ".dat";
-            lane.saveState(saveFile);
+		jp = ViewComponents.FlowLayoutPanel();
+		JLabel cLabel = new JLabel( "Now Bowling: " );
+		curBowler = new JLabel( "(no one)" );
+		JLabel pdLabel = new JLabel( "Pins Down: " );
+		pinsDown = new JLabel( "0" );
 
-            JOptionPane.showMessageDialog(null, "Lane data saved as " + saveFile);
-        }
-    }
+		// Button Panel
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout());
 
-    public final void receiveEvent(final Event lev) {
-        final LaneEvent le = (LaneEvent) lev;
-        final String bowlerNick = le.getBowlerNick();
-        currentBowler.setText(bowlerNick);
+		viewLane = ViewComponents.MakeButtons("View Lane",buttonPanel);
+		viewLane.addActionListener(this);
+		viewPinSetter = ViewComponents.MakeButtons("Pinsetter",buttonPanel);
+		viewPinSetter.addActionListener(this);
 
-        if (le.isMechanicalProblem()) {
-            buttonPanel.get(ButtonNames.BTN_MAINTENANCE_SPACE).setBackground(Color.RED);
-        }
+		maintenance = ViewComponents.MakeButtons(" ",buttonPanel);
+        maintenance.addActionListener(this);
+		maintenance.setBackground(Color.GREEN);
 
-        final boolean isPartyAssigned = lane.isPartyAssigned();
-        buttonPanel.get(ButtonNames.BTN_VIEW_LANE).setEnabled(isPartyAssigned);
-        buttonPanel.get(ButtonNames.BTN_VIEW_PINSETTER).setEnabled(isPartyAssigned);
 
-        final boolean isPaused = lane.isPaused();
-        buttonPanel.get(ButtonNames.BTN_PAUSE).setEnabled(!isPaused && isPartyAssigned);
-        buttonPanel.get(ButtonNames.BTN_RESUME).setEnabled(isPaused || !isPartyAssigned);
+		viewLane.setEnabled( false );
+		viewPinSetter.setEnabled( false );
 
-        final int totalPinsDown = le.getTotalPinsDown();
-        pinsDown.setText(Integer.valueOf(totalPinsDown).toString());
-    }
+		jp.add( cLabel );
+		jp.add( curBowler );
+		jp.add( pdLabel );
+		jp.add( pinsDown );
+		jp.add(buttonPanel);
+
+	}
+
+	public void actionPerformed( ActionEvent e ) {
+		if (lane.calculateScore.partyAssigned) {
+			if (e.getSource().equals(viewPinSetter)) {
+				if (psShowing) {
+					psv.hide();
+					psShowing = false;
+				} else {
+					psv.show();
+					psShowing = true;
+				}
+			}
+
+			if (e.getSource().equals(viewLane)) {
+				if (laneShowing) {
+					lv.hide();
+					laneShowing = false;
+				}
+				else {
+					lv.show();
+					laneShowing = true;
+				}
+			}
+		}
+
+		if (e.getSource().equals(maintenance) && lane.calculateScore.partyAssigned) {
+				lane.unPauseGame();
+				maintenance.setBackground( Color.GREEN );
+		}
+	}
+
+	public void receiveLaneEvent(LaneEvent le) {
+		curBowler.setText( le.bowler.getNickName() );
+		if ( le.mechProb ) {
+			maintenance.setBackground( Color.RED );
+		}
+		if (lane.calculateScore.partyAssigned) {
+			viewLane.setEnabled(true);
+			viewPinSetter.setEnabled(true);
+		} else {
+			viewLane.setEnabled(false);
+			viewPinSetter.setEnabled(false);
+		}
+	}
+
+	public void receivePinsetterEvent(PinsetterEvent pe) {
+		pinsDown.setText( ( new Integer(pe.totalPinsDown()) ).toString() );
+	}
 }

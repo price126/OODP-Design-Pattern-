@@ -1,117 +1,119 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+/**
+ *
+ * To change this generated comment edit the template variable "typecomment":
+ * Window>Preferences>Java>Templates.
+ * To enable and disable the creation of type comments go to
+ * Window>Preferences>Java>Code Generation.
+ */
+
 import java.util.*;
+import java.io.*;
 
-final class ScoreHistoryFile {
-    private static final String SCORE_HISTORY_DAT = "Datastore/SCORE_HISTORY.DAT";
+public class ScoreHistoryFile {
 
-    private ScoreHistoryFile() {
-    }
+	private static final String SCOREHISTORY_DAT = "SCOREHISTORY.DAT";
 
-    static void addScore(final String nick, final int score)
-            throws IOException {
-        final String dateString = Util.getDateString();
-        generateScoreHistoryString(nick, dateString, Integer.toString(score), SCORE_HISTORY_DAT);
-    }
+	public static void addScore(String nick, String date, String score)
+			throws IOException {
 
-    static void generateScoreHistoryString(final String nick, final String date, final String score, final String scoreHistoryDat)
-            throws IOException {
-        final String data = nick + "," + date + "," + score + "\n";
-        final RandomAccessFile out = new RandomAccessFile(scoreHistoryDat, "rw");
-        out.skipBytes((int) out.length());
-        out.writeBytes(data);
-        out.close();
-    }
+		String data = nick + "\t" + date + "\t" + score + "\n";
 
-    private static ArrayList<Score> getAllScores() {
-        final ArrayList<Score> scores = new ArrayList<>(0);
+		RandomAccessFile out = new RandomAccessFile(SCOREHISTORY_DAT, "rw");
+		out.skipBytes((int) out.length());
+		out.writeBytes(data);
+		out.close();
+	}
 
-        try {
-            final BufferedReader in =
-                    new BufferedReader(new FileReader(SCORE_HISTORY_DAT));
-            String data;
-            while ((data = in.readLine()) != null) {
-                final String[] scoreData = data.split(Util.DELIMITER);
-                //"Nick: scoreData[0] Date: scoreData[1] Score: scoreData[2]
-                scores.add(new Score(scoreData[0], scoreData[1], scoreData[2]));
-            }
-        } catch (final Exception error) {
-            error.printStackTrace();
-        }
-        return scores;
-    }
+	public static Vector getScores(String nick)
+			throws IOException {
+		Vector scores = new Vector();
 
-    static ArrayList<Score> getScores(final String nick) {
-        final ArrayList<Score> scores = getAllScores();
-        final ArrayList<Score> retScores = new ArrayList<>(0);
+		BufferedReader in =
+				new BufferedReader(new FileReader(SCOREHISTORY_DAT));
+		String data;
+		while ((data = in.readLine()) != null) {
+			// File format is nick\tfname\te-mail
+			String[] scoredata = data.split("\t");
+			//"Nick: scoredata[0] Date: scoredata[1] Score: scoredata[2]
+			if (nick.equals(scoredata[0])) {
+				scores.add(new Score(scoredata[0], scoredata[1], scoredata[2]));
+			}
+		}
+		return scores;
+	}
 
-        for (final Score score : scores) {
-            if (nick.equals(score.getNick())) {
-                retScores.add(score);
-            }
-        }
+	public static Vector getHighestAndLowest(String nick, boolean isGeneral)
+			throws IOException {
+		Vector scores = new Vector();
 
-        return retScores;
-    }
+		BufferedReader in =
+				new BufferedReader(new FileReader(SCOREHISTORY_DAT));
+		String data;
+		while ((data = in.readLine()) != null) {
+			String[] scoredata = data.split("\t");
+			scores.add(new Score(scoredata[0], scoredata[1], scoredata[2]));
+		}
 
-    static Score getLeastScore() {
-        final ArrayList<Score> scores = getAllScores();
-        Score best = new Score("", "", "10000");
+		Iterator scoreIt = scores.iterator();
+		int max = -1;
+		int min = 301;
+		String bestplayer="";
+		String worstplayer="";
 
-        for (final Score score : scores) {
-            if (best.getScore() > score.getScore()) {
-                best = score;
-            }
-        }
+		while (scoreIt.hasNext()) {
+			Score score = (Score) scoreIt.next();
+//			System.out.print(nick);
+//			System.out.print(" ");
+//			System.out.print(score.getNickName());
+//			System.out.print(" ");
+//			System.out.print(nick.equals(score.getNickName()));
+//			System.out.print(" ");
+//			System.out.print(nick.length());
+//			System.out.println(score.getNickName().length());
 
-        return best;
-    }
+			if (isGeneral || (!isGeneral && score.getNickName().equals(nick))) // isGeneral is a Boolean variable
+			{
+				int intScore = Integer.parseInt(score.getScore());
 
-    static Score getMaxCumulativeScore() {
-        final ArrayList<Score> scores = getAllScores();
-        final Map<String, Integer> mappedScores = new HashMap<>(0);
-        for (final Score score : scores) {
-            final String nick = score.getNick();
-            final int oldScore = mappedScores.getOrDefault(nick, 0);
-            mappedScores.put(nick, oldScore + score.getScore());
-        }
-        Score best = new Score();
+				if (intScore > max)
+				{
+					bestplayer = score.getNickName();
+					max = intScore;
+				}
+				if (intScore < min)
+				{
+					worstplayer = score.getNickName();
+					min = intScore;
+				}
+			}
+		}
 
-        for (final Map.Entry<String, Integer> entry : mappedScores.entrySet()) {
-            if (best.getScore() < entry.getValue()) {
-                best = new Score(entry.getKey(), "", entry.getValue() + "");
-            }
-        }
+		Vector toreturn = new Vector<>();
+		toreturn.add(max);
+		toreturn.add(bestplayer);
+		toreturn.add(min);
+		toreturn.add(worstplayer);
 
-        return best;
-    }
+		return toreturn;
+	}
 
-    static ArrayList<Score> getCareerHighlights(final String player) {
-        final ArrayList<Score> scores = getScores(player);
+	public static double averageScore(String nick) {
+		Vector scores = null;
+		try{
+			scores = getScores(nick);
+		} catch (Exception e){System.err.println("Error: " + e);}
 
-        Collections.sort(scores);
-        Collections.reverse(scores);
-        final ArrayList<Score> retScores = new ArrayList<>(0);
+		assert scores != null;
+		Iterator scoreIt = scores.iterator();
 
-        for (int i = 0, lim = Math.min(scores.size(), 5); i < lim; i++)
-            retScores.add(scores.get(i));
+		double sum = 0, count = 0;
+		while (scoreIt.hasNext()) {
+			Score score = (Score) scoreIt.next();
+			sum = sum + (double)Integer.parseInt(score.getScore());
+			count = count + 1.0;
+		}
 
-        return retScores;
-    }
-
-
-    static Score getBestScore() {
-        final ArrayList<Score> scores = getAllScores();
-        Score best = new Score();
-
-        for (final Score score : scores) {
-            if (best.getScore() < score.getScore()) {
-                best = score;
-            }
-        }
-
-        return best;
-    }
+		return sum/count;
+	}
 }
+

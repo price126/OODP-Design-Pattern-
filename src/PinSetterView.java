@@ -1,144 +1,122 @@
-import javax.swing.*;
+/*
+ * PinSetterView/.java
+ *
+ * Version:
+ *   $Id$
+ *
+ * Revision:
+ *   $Log$
+ */
+
+/**
+ *  constructs a prototype PinSetter GUI
+ *
+ */
+
 import java.awt.*;
+import javax.swing.*;
 import java.util.Vector;
 
-public class PinSetterView implements Observer {
-    private final Vector<JLabel> pinVector = new Vector<>();
-    private final JPanel secondRoll;
+
+public class PinSetterView implements PinsetterObserver {
+
+
+    private final Vector pinVect = new Vector ( );
+	private final JPanel secondRoll;
 
     /**
      * Constructs a Pin Setter GUI displaying which roll it is with
      * yellow boxes along the top (1 box for first roll, 2 boxes for second)
      * and displays the pins as numbers in this format:
-     * <p>
-     * 7   8   9   10
-     * 4   5   6
-     * 2   3
-     * 1
+     *
+     *                7   8   9   10
+     *                  4   5   6
+     *                    2   3
+     *                      1
+     *
      */
 
+	private final JFrame frame;
+    public PinSetterView ( int laneNum ) {
+	
+	frame = new JFrame ( "Lane " + laneNum + ":" );
+	Container cpanel = frame.getContentPane ( );
+	JPanel pins = new JPanel ( );
+	pins.setLayout ( new GridLayout ( 4, 7 ) );
+	
+	//********************Top of GUI indicates first or second roll
+	
+	JPanel top = new JPanel();
 
-    private final JFrame frame;
+	JPanel firstRoll = new JPanel();
+	firstRoll.setBackground( Color.yellow );
+	
+	secondRoll = new JPanel();
+	secondRoll.setBackground ( Color.black );
+	
+	top.add (firstRoll, BorderLayout.WEST );
+	top.add ( secondRoll, BorderLayout.EAST );
 
-    PinSetterView(final int laneNum) {
-        frame = new JFrame("Lane " + laneNum + ":");
+	//**********************Grid of the pins**************************
+	PinSetterRows.SetFourthRow(pins,pinVect);
+	PinSetterRows.SetThirdRow(pins,pinVect);
+	PinSetterRows.SetSecondRow(pins,pinVect);
+	PinSetterRows.SetFirstRow(pins,pinVect);
 
-        final Container cPanel = frame.getContentPane();
-
-        final JPanel top = new JPanel();
-
-        final JPanel firstRoll = new JPanel();
-        firstRoll.setBackground(Color.yellow);
-
-        secondRoll = new JPanel();
-        secondRoll.setBackground(Color.black);
-
-        top.add(firstRoll, BorderLayout.WEST);
-        top.add(secondRoll, BorderLayout.EAST);
-
-        top.setBackground(Color.black);
-        cPanel.add(top, BorderLayout.NORTH);
-
-        final JPanel pins = addPins();
-        cPanel.add(pins, BorderLayout.CENTER);
-
-        frame.pack();
+	top.setBackground ( Color.black );
+	cpanel.add ( top, BorderLayout.NORTH );
+	
+	pins.setBackground ( Color.black );
+	pins.setForeground ( Color.yellow );
+	
+	cpanel.add ( pins, BorderLayout.CENTER );
+	
+	frame.pack();
     }
 
-    private void addDummyPanels(final JPanel pins, final int count) {
-        for (int i = 1; i <= count; i++) {
-            pins.add(new JPanel());
-        }
+    /**
+     * This method receives a pinsetter event.  The event is the current
+     * state of the PinSetter and the method changes how the GUI looks
+     * accordingly.  When pins are "knocked down" the corresponding label
+     * is grayed out.  When it is the second roll, it is indicated by the
+     * appearance of a second yellow box at the top.
+     *
+     * @param e    The state of the pinsetter is sent in this event.
+     */
+    
+
+    public void receivePinsetterEvent(PinsetterEvent pe){
+	if ( !(pe.isFoulCommited()) ) {
+	    	JLabel tempPin;
+	    	for ( int c = 0; c < 10; c++ ) {
+				boolean pin = pe.pinKnockedDown ( c );
+				tempPin = (JLabel)pinVect.get ( c );
+				if ( pin ) {
+		    		tempPin.setForeground ( Color.lightGray );
+				}
+	    	}
+    	}
+		if ( pe.getThrowNumber() == 1 ) {
+	   		 secondRoll.setBackground ( Color.yellow );
+		}
+	if ( pe.pinsDownOnThisThrow() == -1) {
+		for ( int i = 0; i != 10; i++){
+			((JLabel)pinVect.get(i)).setForeground(Color.black);
+		}
+		secondRoll.setBackground( Color.black);
+	}
+    }
+    
+    public void show() {
+    	frame.setVisible(true);
     }
 
-    private JPanel addPins() {
-        final JPanel pins = new JPanel();
-
-        pins.setLayout(new GridLayout(4, 7));
-
-        final JPanel[] panels = getPanels();
-
-        makeFourthRow(pins, panels);
-        makeThirdRow(pins, panels);
-        makeSecondRow(pins, panels);
-        makeFirstRow(pins, panels, 1, 3);
-
-        pins.setBackground(Color.black);
-        pins.setForeground(Color.yellow);
-
-        return pins;
+    public void hide() {
+    	frame.setVisible(false);
     }
-
-    private void makeFirstRow(final JPanel pins, final JPanel[] panels, final int pinNum, final int rightPad) {
-        addDummyPanels(pins, 3);
-        pins.add(panels[pinNum]);
-        addDummyPanels(pins, rightPad);
+    
+    public static void main (String[] args) {
+		PinSetterView pg = new PinSetterView ( 1 );
     }
-
-    private void makeSecondRow(final JPanel pins, final JPanel[] panels) {
-        makeFirstRow(pins, panels, 2, 1);
-        pins.add(panels[3]);
-        addDummyPanels(pins, 2);
-    }
-
-    private void makeThirdRow(final JPanel pins, final JPanel[] panels) {
-        for (int i = 4; i <= 6; i++) {
-            addDummyPanels(pins, 1);
-            pins.add(panels[i]);
-        }
-    }
-
-    private void makeFourthRow(final JPanel pins, final JPanel[] panels) {
-        for (int i = 7; i <= 10; i++) {
-            pins.add(panels[i]);
-            if (i != 10) addDummyPanels(pins, 1);
-        }
-    }
-
-    private JPanel[] getPanels() {
-        final JPanel[] panels = new JPanel[11];
-        for (int pin = 1; pin <= 10; pin++) {
-            final JPanel curr = new JPanel();
-            final JLabel currL = new JLabel(Integer.toString(pin));
-            curr.add(currL);
-            pinVector.add(currL);
-            panels[pin] = curr;
-        }
-        return panels;
-    }
-
-    private void resetColors() {
-        for (int i = 0; i < 10; i++) {
-            pinVector.get(i).setForeground(Color.black);
-        }
-        secondRoll.setBackground(Color.black);
-    }
-
-    public void receiveEvent(final Event pev) {
-        final PinsetterEvent pe = (PinsetterEvent) pev;
-        if (!pe.isFoulCommitted()) {
-            displayKnockedDownPins(pe);
-        }
-
-        final Color secondRollColor = pe.isFirstThrow() ? Color.yellow : Color.black;
-        secondRoll.setBackground(secondRollColor);
-
-        final int pinsDownOnThisThrow = pe.pinsDownOnThisThrow();
-        if (pinsDownOnThisThrow == -1) {
-            resetColors();
-        }
-    }
-
-    private void displayKnockedDownPins(final PinsetterEvent pe) {
-        for (int pinIndex = 0; pinIndex < Pinsetter.PIN_COUNT; pinIndex++) {
-            final boolean pinKnockedDown = pe.isPinKnockedDown(pinIndex);
-            final JLabel tempPin = pinVector.get(pinIndex);
-            final Color color = pinKnockedDown ? Color.lightGray : Color.black;
-            tempPin.setForeground(color);
-        }
-    }
-
-    void toggleVisible() {
-        frame.setVisible(!frame.isVisible());
-    }
+    
 }

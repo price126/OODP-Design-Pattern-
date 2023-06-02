@@ -1,64 +1,70 @@
-import java.util.ArrayList;
-import java.util.Collections;
+/*  $Id$
+ *
+ *  Revisions:
+ *    $Log: LaneEvent.java,v $
+ *    Revision 1.6  2003/02/16 22:59:34  ???
+ *    added mechnanical problem flag
+ *
+ *    Revision 1.5  2003/02/02 23:55:31  ???
+ *    Many many changes.
+ *
+ *    Revision 1.4  2003/02/02 22:44:26  ???
+ *    More data.
+ *
+ *    Revision 1.3  2003/02/02 17:49:31  ???
+ *    Modified.
+ *
+ *    Revision 1.2  2003/01/30 21:21:07  ???
+ *    *** empty log message ***
+ *
+ *    Revision 1.1  2003/01/19 22:12:40  ???
+ *    created laneevent and laneobserver
+ *
+ *
+ */
 
-class LaneEvent implements Event {
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
-    private final ArrayList<String> bowlerNicks;
-    private final int partySize;
-    private final int[][] cumulativeScore;
-    private final int[][] score;
-    private final boolean mechanicalProblemExists;
-    private final String bowlerNick;
-    private final int totalPinsDown;
+public class LaneEvent implements Serializable, LaneEventInterface{
 
-    LaneEvent(final ScorableParty scorer, final int pinsDown, final boolean isHalted) {
-        if (scorer == null) {
-            bowlerNicks = new ArrayList<>(0);
-            partySize = 0;
-            bowlerNick = "";
-            cumulativeScore = new int[1][1];
-            score = new int[1][1];
-        } else {
-            bowlerNicks = scorer.getMemberNicks();
-            partySize = scorer.getPartySize();
-            bowlerNick = scorer.getCurrentThrowerNick();
-            cumulativeScore = scorer.getCumulativeScores();
-            score = scorer.getByBowlerByFramePartResult();
-        }
-        mechanicalProblemExists = isHalted;
-        totalPinsDown = pinsDown;
-    }
+	private final Party p;
+	final int ball;
+	final Bowler bowler;
+	final int[][] cumulScore;
+	final HashMap score;
+	final int index;
+	final int frameNum;
+	final boolean mechProb;
+//	int check;
 
-    final String getBowlerNick() {
-        return bowlerNick;
-    }
+	public LaneEvent(Map<Object,Object> params){
+		CalculateScore calculatescore = (CalculateScore) params.get("calculateScore");
+		p = calculatescore.party;
+		index = (int) params.get("bowlIndex");
+		bowler = (Bowler) params.get("currentThrower");
+		cumulScore = calculatescore.cumulScores;
+		score = calculatescore.scores;
+		frameNum = (int) params.get("frameNumber");
+		ball = (int) params.get("ball");
+		mechProb = (boolean) params.get("gameIsHalted");
+//		if (frameNum == 1 && ball == 0 && index == 0) {
+//			check = 1;
+//		}
+//		else{
+//			check = 0;
+//		}
+	}
 
-    final Iterable<String> getBowlerNicks() {
-        return Collections.unmodifiableList(bowlerNicks);
-    }
+	public Party getParty() {
+		return p;
+	}
 
-    final boolean isMechanicalProblem() {
-        return mechanicalProblemExists;
-    }
+	public Vector getPartyMembers() {
+		return p.getMembers();
+	}
 
-    final int getPartySize() {
-        return partySize;
-    }
-
-    final int[] getScore(final int bowlerIdx) {
-        return score[bowlerIdx];
-    }
-
-    final int[] getCumulativeScore(final int bowlerIdx) {
-        return cumulativeScore[bowlerIdx];
-    }
-
-    final boolean isPartyEmpty() {
-        return partySize == 0;
-    }
-
-    int getTotalPinsDown() {
-        return totalPinsDown;
-    }
 }
  

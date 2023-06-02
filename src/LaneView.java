@@ -1,75 +1,182 @@
-import Widget.WindowFrame;
+/*
+ *  constructs a prototype Lane View
+ *
+ */
 
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
 
-public class LaneView implements ActionListener, Observer {
-    private List<BowlerScoreView> bsv;
-    private final Widget.ContainerPanel containerPanel;
-    private final WindowFrame win;
-    private final LaneWithPinsetter lane;
-    private List<String> bowlerNicks;
+public class LaneView implements Serializable, LaneObserver, ActionListener {
 
-    LaneView(final LaneWithPinsetter ln, final int laneNum) {
-        lane = ln;
-        win = new WindowFrame("Lane " + laneNum + ":");
-        containerPanel = win.getContainer();
-        containerPanel.put(new JPanel());
-        bowlerNicks = new ArrayList<>(0);
-    }
+	private boolean initDone;
 
-    final void setVisible(final boolean state) {
-        win.setVisible(state);
-    }
+	final JFrame frame;
+	final Container cpanel;
+	Vector bowlers;
 
-    void toggleVisible() {
-        win.toggleVisible();
-    }
+	JPanel[][] balls,scores,ballGrid;
+	JLabel[][] ballLabel,scoreLabel;
+	JPanel[] pins;
 
-    private void setupLaneGraphics() {
-        final Widget.ButtonPanel buttonPanel = new Widget.ButtonPanel("")
-                .put(ButtonNames.BTN_MAINTENANCE, this);
-        final Widget.ContainerPanel panel = new Widget.ContainerPanel(0, 1, "");
-        bsv = new ArrayList<>(0);
+	JButton maintenance, pause, resume, save;
+	final Lane lane;
 
-        for (final String bowlerNick : bowlerNicks) {
-            final BowlerScoreView bs = new BowlerScoreView(bowlerNick);
-            bsv.add(bs);
-            panel.put(bs.getPanel());
-        }
+	public LaneView(Lane lane, int laneNum) {
+		this.lane = lane;
+		initDone = true;
+		frame = new JFrame("Lane " + laneNum + ":");
+		cpanel = frame.getContentPane();
+		cpanel.setLayout(new BorderLayout());
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				frame.setVisible(false);
+			}
+		});
+		cpanel.add(new JPanel());
+	}
 
-        containerPanel
-                .clear()
-                .put(panel.getPanel(), "Center")
-                .put(buttonPanel.getPanel(), "South");
-        win.pack();
-    }
+	public void show() {
+		frame.setVisible(true);
+	}
 
-    public final void receiveEvent(final Event lev) {
-        final LaneEvent le = (LaneEvent) lev;
-        if (le.isPartyEmpty())
-            return;
+	public void hide() {
+		frame.setVisible(false);
+	}
 
-        final int numBowlers = le.getPartySize();
+	private JPanel makeFrame(Party party) {
+		initDone = false;
+		bowlers = party.getMembers();
+		int numBowlers = bowlers.size();
 
-        final List<String> givenNicks = (List<String>) le.getBowlerNicks();
-        if (bsv == null || !bowlerNicks.equals(givenNicks)) {
-            bowlerNicks = givenNicks;
-            setupLaneGraphics();
-        }
+		JPanel panel = new JPanel();
 
-        for (int bowlerIdx = 0; bowlerIdx < numBowlers; bowlerIdx++) {
-            bsv.get(bowlerIdx).update(le.getCumulativeScore(bowlerIdx), le.getScore(bowlerIdx));
-        }
-    }
+		panel.setLayout(new GridLayout(0, 1));
 
-    public final void actionPerformed(final ActionEvent e) {
-        final String source = ((AbstractButton) e.getSource()).getText();
-        if (ButtonNames.BTN_MAINTENANCE.equals(source)) {
-            lane.pauseGame(true);
-        }
-    }
+		int a=23,b=10;
+		balls = new JPanel[numBowlers][a];
+		ballLabel = new JLabel[numBowlers][a];
+		scores = new JPanel[numBowlers][b];
+		scoreLabel = new JLabel[numBowlers][b];
+
+		ballGrid = new JPanel[numBowlers][b];
+		pins = new JPanel[numBowlers];
+
+		for (int i = 0; i != numBowlers; i++) {
+			BallGridView.BallLabel(i,this);
+			BallGridView.BallGrid(i,this);
+			BallGridView.setpinscore(i,this);
+			panel.add(pins[i]);
+		}
+
+		initDone = true;
+		return panel;
+	}
+
+	public void receiveLaneEvent(LaneEvent le) {
+		if (!lane.calculateScore.partyAssigned) {
+			return;
+		}
+
+		int numBowlers = le.getPartyMembers().size();
+
+		while (!initDone) {
+			try {
+				Thread.sleep(1);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+//		if (le.check == 1) {
+			System.out.println("Making the frame.");
+			cpanel.removeAll();
+			cpanel.add(makeFrame(le.getParty()), "Center");
+
+			// Button Panel
+			JPanel buttonPanel = ViewComponents.FlowLayoutPanel();
+			maintenance = ViewComponents.MakeButtons("Maintenance Call",buttonPanel);
+			maintenance.addActionListener(this);
+			pause = ViewComponents.MakeButtons("Pause",buttonPanel);
+			pause.addActionListener(this);
+			resume = ViewComponents.MakeButtons("Resume",buttonPanel);
+			resume.addActionListener(this);
+			save = ViewComponents.MakeButtons("Save Game",buttonPanel);
+			save.addActionListener(this);
+
+			cpanel.add(buttonPanel, "South");
+			frame.pack();
+//		}
+
+		int[][] lescores = le.cumulScore;
+		showScore(le,numBowlers,lescores);
+	}
+
+	public void showScore(LaneEvent le,int numBowlers,int[][] lescores){
+		for (int k = 0; k < numBowlers; k++) {
+			setScoreLabel(le,lescores,k);
+			setBallLabel(le,k);
+		}
+	}
+
+	public void setScoreLabel(LaneEvent le,int[][] lescores,int k){
+		for (int i = 0; i <= le.frameNum - 1; i++) {
+			if (lescores[k][i] != 0)
+					scoreLabel[k][i].setText((Integer.valueOf(lescores[k][i])).toString());
+		}
+	}
+
+	public void setBallLabel(LaneEvent le,int k){
+		for (int i = 0; i < 21; i++) {
+			int val = ((int[]) le.score.get(bowlers.get(k)))[i];
+			if(val == -1){
+				continue;
+			}
+
+			int val1 = 0;
+			if(i > 0) {
+				val1 = ((int[]) le.score.get(bowlers.get(k)))[i - 1];
+			}
+
+			String st = checkString(le,val,val1,i,k);
+			ballLabel[k][i].setText(st);
+		}
+	}
+
+	public String checkString(LaneEvent le, int val, int val1, int i, int k){
+		String st = "";
+		if (val == 10 && (i % 2 == 0 || i == 19))
+			st = "X";
+		else if (val + val1 == 10 && i % 2 == 1)
+			st = "/";
+		else if (val == -2 )
+			st = "F";
+		else
+			st = (Integer.valueOf(((int[]) le.score.get(bowlers.get(k)))[i])).toString();
+		return st;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(maintenance)) {
+			lane.pauseGame();
+		}
+		else if (e.getSource().equals(pause)) {
+			lane.pauseGame();
+		}
+		else if (e.getSource().equals(resume)) {
+			lane.unPauseGame();
+		}
+		else if (e.getSource().equals(save)) {
+			lane.pauseGame();
+			try {
+				PausedLanesFile.addPausedLane(lane);
+			} catch (IOException | ClassNotFoundException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
 }

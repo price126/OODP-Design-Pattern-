@@ -21,17 +21,21 @@
  */
 
 /**
- * Class that is the outer container for the bowling sim
+ *  Class that is the outer container for the bowling sim
+ *
  */
 
-class Alley {
-    Alley(@SuppressWarnings("SameParameterValue") final int numLanes) {
-        final ControlDesk controldesk = new ControlDesk(numLanes);
-        new Thread(controldesk).start();
+public class Alley {
+	public final ControlDesk controldesk;
 
-        final Observer cdv = new ControlDeskView(controldesk);
-        controldesk.subscribe(cdv);
+    public Alley( int numLanes ) {
+        controldesk = new ControlDesk( numLanes );
     }
+
+	public ControlDesk getControlDesk() {
+		return controldesk;
+	}
+	
 }
 
 

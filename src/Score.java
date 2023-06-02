@@ -1,39 +1,37 @@
-class Score implements Comparable<Score> {
+/**
+ *
+ * To change this generated comment edit the template variable "typecomment":
+ * Window>Preferences>Java>Templates.
+ * To enable and disable the creation of type comments go to
+ * Window>Preferences>Java>Code Generation.
+ */
 
-    private final String nickname;
+public class Score {
+
+    private final String nick;
     private final String date;
-    private final Integer score;
+    private final String score;
 
-    Score(final String nick, final String date, final String score) {
-        nickname = nick;
-        this.date = date;
-        this.score = Integer.parseInt(score);
+    public Score( String nick, String date, String score ) {
+		this.nick=nick;
+		this.date=date;
+		this.score=score;
     }
 
-    Score() {
-        nickname = "";
-        date = "";
-        score = 0;
+    public String getNickName() {
+        return nick;  
     }
 
-    final String getDate() {
-        return date;
-    }
+	public String getDate() {
+		return date;
+	}
+	
+	public String getScore() {
+		return score;
+	}
 
-    final Integer getScore() {
-        return score;
-    }
+	public String toString() {
+		return nick + "\t" + date + "\t" + score;
+	}
 
-    public final String toString() {
-        return nickname + "\t" + date + "\t" + score;
-    }
-
-    final String getNick() {
-        return nickname;
-    }
-
-    @Override
-    public int compareTo(final Score o) {
-        return score - o.score;
-    }
 }
