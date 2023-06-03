@@ -131,6 +131,11 @@ package lane;
  * 
  */
 
+import game.*;
+import user.Bowler;
+import viewer.EndGamePrompt;
+import viewer.EndGameReport;
+
 import java.io.Serializable;
 import java.util.*;
 

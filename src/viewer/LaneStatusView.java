@@ -6,9 +6,13 @@ package viewer; /**
  * Window>Preferences>Java>Code Generation.
  */
 
+import game.PinsetterEvent;
+import game.PinsetterObserver;
+import game.PinsetterSubscriber;
 import lane.Lane;
 import lane.LaneEvent;
 import lane.LaneObserver;
+import lane.LaneSubscriber;
 
 import java.awt.*;
 import java.awt.event.*;

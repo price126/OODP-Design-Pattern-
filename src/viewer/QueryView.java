@@ -1,5 +1,6 @@
 package viewer;
 
+import game.ScoreHistoryFile;
 import user.BowlerFile;
 import viewer.ViewComponents;
 

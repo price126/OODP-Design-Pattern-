@@ -1,5 +1,7 @@
 package viewer;
 
+import user.Bowler;
+
 import javax.swing.*;
 import java.awt.*;
 

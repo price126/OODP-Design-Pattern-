@@ -22,6 +22,7 @@ package user;/*
  *
  */
 
+import game.CalculateScore;
 import lane.Lane;
 
 import java.io.Serializable;

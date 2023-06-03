@@ -1,6 +1,4 @@
-/**
- *
- */
+package viewer;
 
 import java.awt.*;
 import java.awt.print.*;

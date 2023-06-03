@@ -41,8 +41,12 @@ package control;/* control.ControlDesk.java
  */
 
 import lane.Lane;
+import user.PartyQueue;
+import user.Queue;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Vector;
+
 
 public class ControlDesk extends Thread implements ControlDeskInterface{
 

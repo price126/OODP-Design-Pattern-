@@ -22,10 +22,10 @@ package user;/* BowlerFile.java
 import java.util.*;
 import java.io.*;
 
-class BowlerFile {
+public class BowlerFile {
 
 	/** The location of the bowler database */
-	private static final String BOWLER_DAT = "user/BOWLERS.DAT";
+	private static final String BOWLER_DAT = "./src/user/BOWLERS.DAT";
 
     /**
      * Retrieves bowler information from the database and returns a Bowler objects with populated fields.

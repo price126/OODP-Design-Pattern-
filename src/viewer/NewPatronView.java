@@ -16,6 +16,9 @@ package viewer;/* viewer.AddPartyView.java
  *
  */
 
+import user.Bowler;
+import user.BowlerFile;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;

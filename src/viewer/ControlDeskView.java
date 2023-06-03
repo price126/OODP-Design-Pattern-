@@ -14,10 +14,12 @@ package viewer;/* viewer.ControlDeskView.java
  */
 
 import control.ControlDesk;
+import control.ControlDeskEvent;
 import control.ControlDeskObserver;
 import game.PinsetterSubscriber;
 import lane.Lane;
 import lane.LaneSubscriber;
+import user.PartyQueue;
 
 import java.awt.event.*;
 import javax.swing.*;

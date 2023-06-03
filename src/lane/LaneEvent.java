@@ -23,6 +23,10 @@ package lane;/*  $Id$
  *
  */
 
+import game.CalculateScore;
+import user.Bowler;
+import user.Party;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,12 +36,12 @@ public class LaneEvent implements Serializable, LaneEventInterface{
 
 	private final Party p;
 	final int ball;
-	final Bowler bowler;
-	final int[][] cumulScore;
-	final HashMap score;
+	public final Bowler bowler;
+	public final int[][] cumulScore;
+	public final HashMap score;
 	final int index;
-	final int frameNum;
-	final boolean mechProb;
+	public final int frameNum;
+	public final boolean mechProb;
 //	int check;
 
 	public LaneEvent(Map<Object,Object> params){

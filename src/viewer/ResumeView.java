@@ -1,6 +1,8 @@
 package viewer;
 
 import control.ControlDesk;
+import game.CalculateScore;
+import lane.PausedLanesFile;
 import user.Bowler;
 import user.PartyQueue;
 import viewer.ViewComponents;

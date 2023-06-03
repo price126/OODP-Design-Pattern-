@@ -6,6 +6,9 @@ package viewer; /**
  * Window>Preferences>Java>Code Generation.
  */
 
+import user.Bowler;
+import user.Party;
+
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;

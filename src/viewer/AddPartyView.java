@@ -25,6 +25,8 @@ package viewer;/* viewer.AddPartyView.java
  *
  */
 
+import user.BowlerFile;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;

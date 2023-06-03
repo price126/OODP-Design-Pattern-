@@ -3,6 +3,7 @@ package user;
 import control.ControlDesk;
 import control.ControlDeskEvent;
 import control.ControlDeskSubscriber;
+import game.CalculateScore;
 import lane.Lane;
 
 import java.util.Iterator;
