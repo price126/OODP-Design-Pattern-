@@ -6,8 +6,8 @@ As the starting point of the project, the full working code was available. Throu
 ![img](img/dashboard.png)
 
 # Run
-* `javac drive.java`                                
-* `java drive`
+* `javac viewer.drive.java`                                
+* `java viewer.drive`
 
 # File Structure
 * `src/`: Contains all source files.                                   
