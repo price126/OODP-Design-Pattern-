@@ -49,7 +49,7 @@ public class ScoreReport {
 
 		content.append("\n\n");
 		content.append("Thank you for your continuing patronage.");
-
+		System.out.println(content);
 	}
 
 	public void sendEmail(String recipient) {
