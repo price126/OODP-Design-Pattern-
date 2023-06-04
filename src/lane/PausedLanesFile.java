@@ -10,7 +10,7 @@ import java.util.Vector;
 public class PausedLanesFile implements Serializable {
 
     public static void addPausedLane(Lane lane) throws IOException, ClassNotFoundException {
-        String filepath = "lane/LANE.DAT";
+        String filepath = "./src/lane/LANE.DAT";
         FileInputStream fileIn = new FileInputStream(filepath);
         ObjectInputStream objectIn = new ObjectInputStream(fileIn);
         Vector storedLaneVector = (Vector) objectIn.readObject();
@@ -46,7 +46,7 @@ public class PausedLanesFile implements Serializable {
     }
 
     public static Vector readPausedLanes() throws IOException, ClassNotFoundException {
-        String filepath = "lane/LANE.DAT";
+        String filepath = "./src/lane/LANE.DAT";
         FileInputStream fileIn = new FileInputStream(filepath);
         ObjectInputStream objectIn = new ObjectInputStream(fileIn);
         Vector storedLaneVector = (Vector) objectIn.readObject();
@@ -55,7 +55,7 @@ public class PausedLanesFile implements Serializable {
     }
 
     public static void resumePausedLane(int index) throws IOException, ClassNotFoundException {
-        String filepath = "lane/LANE.DAT";
+        String filepath = "./src/lane/LANE.DAT";
         FileInputStream fileIn = new FileInputStream(filepath);
         ObjectInputStream objectIn = new ObjectInputStream(fileIn);
         Vector storedLaneVector = (Vector) objectIn.readObject();
