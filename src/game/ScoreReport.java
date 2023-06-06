@@ -29,7 +29,7 @@ public class ScoreReport {
 		assert v != null;
 		Iterator scoreIt = v.iterator();
 		
-		content = new StringBuilder("--Lucky Strike Bowling lane.Alley game.Score Report--\n\n");
+		content = new StringBuilder("--Lucky Strike Bowling Alley Score Report--\n\n");
 		content.append("Report for ").append(full).append(", aka \"").append(nick).append("\":\n\n");
 		content.append("Final scores for this session: ");
 		content.append(scores[0]);
