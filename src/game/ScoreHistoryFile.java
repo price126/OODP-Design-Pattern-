@@ -42,62 +42,9 @@ public class ScoreHistoryFile {
 		return scores;
 	}
 
-	public static Vector getHighestAndLowest(String nick, boolean isGeneral)
-			throws IOException {
-		Vector scores = new Vector();
-
-		BufferedReader in =
-				new BufferedReader(new FileReader(SCOREHISTORY_DAT));
-		String data;
-		while ((data = in.readLine()) != null) {
-			String[] scoredata = data.split("\t");
-			scores.add(new Score(scoredata[0], scoredata[1], scoredata[2]));
-		}
-
-		Iterator scoreIt = scores.iterator();
-		int max = -1;
-		int min = 301;
-		String bestplayer="";
-		String worstplayer="";
-
-		while (scoreIt.hasNext()) {
-			Score score = (Score) scoreIt.next();
-//			System.out.print(nick);
-//			System.out.print(" ");
-//			System.out.print(score.getNickName());
-//			System.out.print(" ");
-//			System.out.print(nick.equals(score.getNickName()));
-//			System.out.print(" ");
-//			System.out.print(nick.length());
-//			System.out.println(score.getNickName().length());
-
-			if (isGeneral || (!isGeneral && score.getNickName().equals(nick))) // isGeneral is a Boolean variable
-			{
-				int intScore = Integer.parseInt(score.getScore());
-
-				if (intScore > max)
-				{
-					bestplayer = score.getNickName();
-					max = intScore;
-				}
-				if (intScore < min)
-				{
-					worstplayer = score.getNickName();
-					min = intScore;
-				}
-			}
-		}
-
-		Vector toreturn = new Vector<>();
-		toreturn.add(max);
-		toreturn.add(bestplayer);
-		toreturn.add(min);
-		toreturn.add(worstplayer);
-
-		return toreturn;
-	}
-
-	public static double averageScore(String nick) {
+	// If you have additional functions to add, please add it. The example below illustrates calculating the average score
+	
+/* public static double averageScore(String nick) {
 		Vector scores = null;
 		try{
 			scores = getScores(nick);
@@ -115,5 +62,6 @@ public class ScoreHistoryFile {
 
 		return sum/count;
 	}
+	*/
 }
 

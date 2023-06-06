@@ -30,7 +30,7 @@ import java.util.*;
 
 public class ControlDeskView implements ActionListener, ControlDeskObserver {
 
-	private final JButton addParty,finished,assign,query,resume;
+	private final JButton addParty,finished,assign,resume;
 	private final JFrame win;
 	private final JList partyList;
 	private final int maxMembers;
@@ -58,8 +58,6 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 		addParty.addActionListener(this);
 		assign = ViewComponents.MakeButtons("Assign Lanes",controlsPanel);
 		assign.addActionListener(this);
-		query = ViewComponents.MakeButtons("Records",controlsPanel);
-		query.addActionListener(this);
 		resume = ViewComponents.MakeButtons("Resume games",controlsPanel);
 		resume.addActionListener(this);
 		finished = ViewComponents.MakeButtons("Finished",controlsPanel);
@@ -133,9 +131,6 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 		else if (e.getSource().equals(finished)) {
 			win.setVisible(false);
 			System.exit(0);
-		}
-		else if (e.getSource().equals(query)) {
-			QueryView queryview = new QueryView();
 		}
 		else if (e.getSource().equals(resume)) {
 			try {
