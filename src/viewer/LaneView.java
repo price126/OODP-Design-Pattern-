@@ -110,8 +110,8 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 			pause.addActionListener(this);
 			resume = ViewComponents.MakeButtons("Resume",buttonPanel);
 			resume.addActionListener(this);
-			save = ViewComponents.MakeButtons("Save Game",buttonPanel);
-			save.addActionListener(this);
+			// save = ViewComponents.MakeButtons("Save Game",buttonPanel);
+			// save.addActionListener(this);
 
 			cpanel.add(buttonPanel, "South");
 			frame.pack();
@@ -175,14 +175,14 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 		else if (e.getSource().equals(resume)) {
 			lane.unPauseGame();
 		}
-		else if (e.getSource().equals(save)) {
-			lane.pauseGame();
-			try {
-				PausedLanesFile.addPausedLane(lane);
-			} catch (IOException | ClassNotFoundException ex) {
-				ex.printStackTrace();
-			}
-		}
+//		else if (e.getSource().equals(save)) {
+//			lane.pauseGame();
+//			try {
+//				PausedLanesFile.addPausedLane(lane);
+//			} catch (IOException | ClassNotFoundException ex) {
+//				ex.printStackTrace();
+//			}
+//		}
 	}
 
 }
