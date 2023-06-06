@@ -30,7 +30,7 @@ import java.util.*;
 
 public class ControlDeskView implements ActionListener, ControlDeskObserver {
 
-	private final JButton addParty,finished,resume;
+	private final JButton addParty,finished; //,resume;
 	private final JFrame win;
 	private final JList partyList;
 	private final int maxMembers;
@@ -56,8 +56,8 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 		//Buttons
 		addParty = ViewComponents.MakeButtons("Add Party",controlsPanel);
 		addParty.addActionListener(this);
-		resume = ViewComponents.MakeButtons("Resume games",controlsPanel);
-		resume.addActionListener(this);
+		//resume = ViewComponents.MakeButtons("Resume games",controlsPanel);
+		//resume.addActionListener(this);
 		finished = ViewComponents.MakeButtons("Finished",controlsPanel);
 		finished.addActionListener(this);
 		// Lane Status Panel
@@ -127,14 +127,14 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 			win.setVisible(false);
 			System.exit(0);
 		}
-		else if (e.getSource().equals(resume)) {
-			try {
-				ResumeView resumeView = new ResumeView(controlDesk);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			} catch (ClassNotFoundException ex) {
-				ex.printStackTrace();
-			}
+		//else if (e.getSource().equals(resume)) {
+		//	try {
+		//		ResumeView resumeView = new ResumeView(controlDesk);
+		//	} catch (IOException ex) {
+		//		ex.printStackTrace();
+		//	} catch (ClassNotFoundException ex) {
+		//		ex.printStackTrace();
+		//	}
 //			try {
 //
 //				Vector<Boolean> returnedFlags = lane.PausedLanesFile.readPausedLanesFlags();
@@ -156,7 +156,7 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 //					System.out.print(a.getNick()+" ");
 //				}
 //				System.out.println();
-		}
+//		}
 	}
 
 	/**

@@ -1,3 +1,4 @@
+/*
 package viewer;
 
 import control.ControlDesk;
@@ -103,3 +104,4 @@ public class ResumeView implements ActionListener, ListSelectionListener {
         }
     }
 }
+*/
