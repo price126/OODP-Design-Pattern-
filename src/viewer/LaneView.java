@@ -6,7 +6,7 @@ package viewer;/*
 import lane.Lane;
 import lane.LaneEvent;
 import lane.LaneObserver;
-import lane.PausedLanesFile;
+//import lane.PausedLanesFile;
 import user.Party;
 
 import java.awt.*;
@@ -28,7 +28,7 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 	JLabel[][] ballLabel,scoreLabel;
 	JPanel[] pins;
 
-	JButton maintenance, pause, resume, save;
+	JButton maintenance; //, pause, resume, save;
 	final Lane lane;
 
 	public LaneView(Lane lane, int laneNum) {
@@ -106,10 +106,10 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 			JPanel buttonPanel = ViewComponents.FlowLayoutPanel();
 			maintenance = ViewComponents.MakeButtons("Maintenance Call",buttonPanel);
 			maintenance.addActionListener(this);
-			pause = ViewComponents.MakeButtons("Pause",buttonPanel);
-			pause.addActionListener(this);
-			resume = ViewComponents.MakeButtons("Resume",buttonPanel);
-			resume.addActionListener(this);
+//			pause = ViewComponents.MakeButtons("Pause",buttonPanel);
+//			pause.addActionListener(this);
+//			resume = ViewComponents.MakeButtons("Resume",buttonPanel);
+//			resume.addActionListener(this);
 			// save = ViewComponents.MakeButtons("Save Game",buttonPanel);
 			// save.addActionListener(this);
 
@@ -169,12 +169,12 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 		if (e.getSource().equals(maintenance)) {
 			lane.pauseGame();
 		}
-		else if (e.getSource().equals(pause)) {
-			lane.pauseGame();
-		}
-		else if (e.getSource().equals(resume)) {
-			lane.unPauseGame();
-		}
+//		else if (e.getSource().equals(pause)) {
+//			lane.pauseGame();
+//		}
+//		else if (e.getSource().equals(resume)) {
+//			lane.unPauseGame();
+//		}
 //		else if (e.getSource().equals(save)) {
 //			lane.pauseGame();
 //			try {
