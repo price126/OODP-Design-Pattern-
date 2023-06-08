@@ -16,7 +16,6 @@ public class PausedLanesFile implements Serializable {
         Vector storedLaneVector = (Vector) objectIn.readObject();
         objectIn.close();
 
-//        Vector storedLaneVector = new Vector<>();
         Vector v = new Vector<>();
         v.add(true);
 
@@ -25,7 +24,6 @@ public class PausedLanesFile implements Serializable {
         v.add(lane.setter.foul);
         v.add(lane.setter.throwNumber);
 
-//        System.out.println("In store:" + lane.calculateScore.curScores[0]);
         v.add(lane.calculateScore);
         v.add(lane.gameIsHalted);
         v.add(lane.gameFinished);
@@ -59,16 +57,12 @@ public class PausedLanesFile implements Serializable {
         FileInputStream fileIn = new FileInputStream(filepath);
         ObjectInputStream objectIn = new ObjectInputStream(fileIn);
         Vector storedLaneVector = (Vector) objectIn.readObject();
-//        System.out.println("In resume");
-//        System.out.println(((Vector)storedLaneVector.get(index)).get(0));
         ((Vector) storedLaneVector.get(index)).set(0, false);
-//        System.out.println(((Vector)storedLaneVector.get(index)).get(0));
         objectIn.close();
         FileOutputStream fileOut = new FileOutputStream(filepath);
         ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
         objectOut.writeObject(storedLaneVector);
         objectOut.close();
     }
-
 }
 

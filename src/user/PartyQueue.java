@@ -28,16 +28,6 @@ public class PartyQueue {
             }
         }
 
-//        while (it.hasNext() && controlDesk.pausePartyQueue.hasMoreElements()) {
-//            Lane curLane = (Lane) it.next();
-//
-//            if (!curLane.calculateScore.partyAssigned) {
-//                System.out.println("ok... assigning this party");
-//                Vector queueElement = (Vector) controlDesk.pausePartyQueue.next();
-//
-//                ((Party)queueElement.get(0)).assignPausedParty(curLane, (Vector) queueElement.get(1));
-//            }
-//        }
         ControlDeskSubscriber.publish(controlDesk,new ControlDeskEvent(PartyQueue.getPartyQueue(controlDesk)));
     }
 

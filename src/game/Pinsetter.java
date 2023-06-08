@@ -190,18 +190,7 @@ public class Pinsetter implements Serializable {
 		for (int i=0; i <= 9; i++) {
 			pins[i] = true;
 		}
-	}		
-
-//	/** subscribe()
-//	 *
-//	 * subscribe objects to send events to
-//	 *
-//	 * @pre none
-//	 * @post the subscriber object will recieve events when their generated
-//	 */
-//	public void subscribe(PinsetterObserver subscriber) {
-//		subscribers.add(subscriber);
-//	}
+	}
 
 }
 

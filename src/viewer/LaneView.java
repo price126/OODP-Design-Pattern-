@@ -97,7 +97,7 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 			}
 		}
 
-//		if (le.check == 1) {
+
 			System.out.println("Making the frame.");
 			cpanel.removeAll();
 			cpanel.add(makeFrame(le.getParty()), "Center");
@@ -106,19 +106,12 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 			JPanel buttonPanel = ViewComponents.FlowLayoutPanel();
 			maintenance = ViewComponents.MakeButtons("Maintenance Call",buttonPanel);
 			maintenance.addActionListener(this);
-//			pause = ViewComponents.MakeButtons("Pause",buttonPanel);
-//			pause.addActionListener(this);
-//			resume = ViewComponents.MakeButtons("Resume",buttonPanel);
-//			resume.addActionListener(this);
-			// save = ViewComponents.MakeButtons("Save Game",buttonPanel);
-			// save.addActionListener(this);
 
 			cpanel.add(buttonPanel, "South");
 			frame.pack();
-//		}
 
-		int[][] lescores = le.cumulScore;
-		showScore(le,numBowlers,lescores);
+			int[][] lescores = le.cumulScore;
+			showScore(le,numBowlers,lescores);
 	}
 
 	public void showScore(LaneEvent le,int numBowlers,int[][] lescores){
@@ -169,20 +162,6 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 		if (e.getSource().equals(maintenance)) {
 			lane.pauseGame();
 		}
-//		else if (e.getSource().equals(pause)) {
-//			lane.pauseGame();
-//		}
-//		else if (e.getSource().equals(resume)) {
-//			lane.unPauseGame();
-//		}
-//		else if (e.getSource().equals(save)) {
-//			lane.pauseGame();
-//			try {
-//				PausedLanesFile.addPausedLane(lane);
-//			} catch (IOException | ClassNotFoundException ex) {
-//				ex.printStackTrace();
-//			}
-//		}
 	}
 
 }

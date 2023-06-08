@@ -41,27 +41,5 @@ public class ScoreHistoryFile {
 		}
 		return scores;
 	}
-
-	// If you have additional functions to add, please add it. The example below illustrates calculating the average score
-	
-/* public static double averageScore(String nick) {
-		Vector scores = null;
-		try{
-			scores = getScores(nick);
-		} catch (Exception e){System.err.println("Error: " + e);}
-
-		assert scores != null;
-		Iterator scoreIt = scores.iterator();
-
-		double sum = 0, count = 0;
-		while (scoreIt.hasNext()) {
-			Score score = (Score) scoreIt.next();
-			sum = sum + (double)Integer.parseInt(score.getScore());
-			count = count + 1.0;
-		}
-
-		return sum/count;
-	}
-	*/
 }
 

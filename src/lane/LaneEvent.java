@@ -42,7 +42,7 @@ public class LaneEvent implements Serializable, LaneEventInterface{
 	final int index;
 	public final int frameNum;
 	public final boolean mechProb;
-//	int check;
+
 
 	public LaneEvent(Map<Object,Object> params){
 		CalculateScore calculatescore = (CalculateScore) params.get("calculateScore");
@@ -54,12 +54,6 @@ public class LaneEvent implements Serializable, LaneEventInterface{
 		frameNum = (int) params.get("frameNumber");
 		ball = (int) params.get("ball");
 		mechProb = (boolean) params.get("gameIsHalted");
-//		if (frameNum == 1 && ball == 0 && index == 0) {
-//			check = 1;
-//		}
-//		else{
-//			check = 0;
-//		}
 	}
 
 	public Party getParty() {

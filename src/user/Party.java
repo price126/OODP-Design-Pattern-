@@ -94,10 +94,6 @@ public class Party implements Serializable {
 		curLane.setter.foul = (boolean) resumeLane.get(3);
 		curLane.setter.throwNumber = (int) resumeLane.get(4);
 
-//		curLane.calculateScore.curScores = new int[((CalculateScore)((resumeLane).get(5))).party.myBowlers.size()];
-//		curLane.calculateScore.finalScores = new int[((CalculateScore)((resumeLane).get(5))).party.myBowlers.size()][128];
-//		curLane.calculateScore.cumulScores = new int[((CalculateScore)((resumeLane).get(5))).party.myBowlers.size()][10];
-
 		curLane.calculateScore = (CalculateScore) resumeLane.get(5);
 		resetBowlerIterator(curLane);
 
@@ -105,7 +101,6 @@ public class Party implements Serializable {
 
 		curLane.gameFinished = (boolean) resumeLane.get(7);
 		curLane.ball = (int) resumeLane.get(8);
-//		curLane.bowlIndex = (int) resumeLane.get(9);
 		curLane.bowlIndex = 0;
 		curLane.frameNumber = (int) resumeLane.get(10);
 		curLane.tenthFrameStrike = (boolean) resumeLane.get(11);

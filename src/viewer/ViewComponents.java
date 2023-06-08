@@ -66,7 +66,6 @@ public class ViewComponents {
         JButton btn = new JButton(st);
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new FlowLayout());
-//        btn.addActionListener((ActionListener) btn);
         btnPanel.add(btn);
         buttonPanel.add(btnPanel);
         return btn;

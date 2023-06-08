@@ -1,4 +1,5 @@
-package lane;/*
+package lane;
+/*
  * lane.Alley.java
  *
  * Version:

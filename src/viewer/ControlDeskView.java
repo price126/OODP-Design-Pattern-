@@ -25,7 +25,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import java.io.IOException;
+// import java.io.IOException;
 import java.util.*;
 
 public class ControlDeskView implements ActionListener, ControlDeskObserver {
