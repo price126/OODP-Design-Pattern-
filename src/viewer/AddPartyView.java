@@ -71,7 +71,7 @@ public class AddPartyView implements AddPartyViewInterface, ActionListener, List
 
 		partyList = new JList(empty);
 		partyList.setFixedCellWidth(120);
-		partyList.setVisibleRowCount(6);
+		partyList.setVisibleRowCount(5);
 		partyList.addListSelectionListener(this);
 		JScrollPane partyPane = new JScrollPane(partyList);
 		partyPanel.add(partyPane);
