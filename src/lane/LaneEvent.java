@@ -23,7 +23,7 @@ package lane;/*  $Id$
  *
  */
 
-import game.CalculateScore;
+import game.ScoreCalculator;
 import user.Bowler;
 import user.Party;
 
@@ -45,7 +45,7 @@ public class LaneEvent implements Serializable, LaneEventInterface{
 
 
 	public LaneEvent(Map<Object,Object> params){
-		CalculateScore calculatescore = (CalculateScore) params.get("calculateScore");
+		ScoreCalculator calculatescore = (ScoreCalculator) params.get("calculateScore");
 		p = calculatescore.party;
 		index = (int) params.get("bowlIndex");
 		bowler = (Bowler) params.get("currentThrower");

@@ -1,10 +1,6 @@
 package lane;
 
-import lane.Lane;
-
 import java.io.*;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Vector;
 
 public class PausedLanesFile implements Serializable {
@@ -24,7 +20,7 @@ public class PausedLanesFile implements Serializable {
         v.add(lane.setter.foul);
         v.add(lane.setter.throwNumber);
 
-        v.add(lane.calculateScore);
+        v.add(lane.scoreCalculator);
         v.add(lane.gameIsHalted);
         v.add(lane.gameFinished);
         v.add(lane.ball);

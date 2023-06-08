@@ -143,7 +143,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 	public final Pinsetter setter;
 	public final Vector subscribers;
 
-	public CalculateScore calculateScore;
+	public ScoreCalculator scoreCalculator;
 	
 	public boolean gameIsHalted;
 	public boolean gameFinished;
@@ -166,7 +166,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 	public Lane() { 
 		setter = new Pinsetter();
 		subscribers = new Vector();
-		calculateScore = new CalculateScore();
+		scoreCalculator = new ScoreCalculator();
 		gameIsHalted = false;
 		gameNumber = 0;
 		PinsetterSubscriber.subscribe(setter,this);
@@ -179,7 +179,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 	 */
 	public void run() {
 		while (true) {
-			if (calculateScore.partyAssigned && !gameFinished) {	// we have a party on this lane,
+			if (scoreCalculator.partyAssigned && !gameFinished) {	// we have a party on this lane,
 								// so next bower can take a throw
 				checkGameHalted();
 
@@ -200,7 +200,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 
 				else {
 					frameNumber++;
-					calculateScore.party.resetBowlerIterator(this);
+					scoreCalculator.party.resetBowlerIterator(this);
 					bowlIndex = 0;
 					if (frameNumber > 9) {
 						gameFinished = true;
@@ -209,8 +209,8 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 				}
 			}
 
-			else if(calculateScore.partyAssigned){
-				String partyName = ((Bowler) calculateScore.party.getMembers().get(0)).getNickName() + "'s Party";
+			else if(scoreCalculator.partyAssigned){
+				String partyName = ((Bowler) scoreCalculator.party.getMembers().get(0)).getNickName() + "'s Party";
 				EndGamePrompt egp = new EndGamePrompt(partyName);
 				int result = egp.getResult();
 				egp.distroy();
@@ -219,19 +219,19 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 
 				// TODO: send record of scores to control desk
 				if (result == 1) {					// yes, want to play again
-					calculateScore.resetScores(calculateScore.party);
+					scoreCalculator.resetScores(scoreCalculator.party);
 					gameFinished = false;
 					frameNumber = 0;
-					calculateScore.party.resetBowlerIterator(this);
+					scoreCalculator.party.resetBowlerIterator(this);
 				}
 				else if (result == 2) {// no, dont want to play another game
 					Vector printVector;
-					EndGameReport egr = new EndGameReport( partyName, calculateScore.party);
+					EndGameReport egr = new EndGameReport( partyName, scoreCalculator.party);
 					printVector = egr.getResult();
-					calculateScore.partyAssigned = false;
-					Iterator scoreIt = calculateScore.party.getMembers().iterator();
-					calculateScore.party = null;
-					calculateScore.partyAssigned = false;
+					scoreCalculator.partyAssigned = false;
+					Iterator scoreIt = scoreCalculator.party.getMembers().iterator();
+					scoreCalculator.party = null;
+					scoreCalculator.partyAssigned = false;
 					LaneSubscriber.publish(this,lanePublish());
 					sendScore(scoreIt,printVector);
 				}
@@ -243,7 +243,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 
 	public void checkframenine(){
 		if (frameNumber == 9){
-			calculateScore.finalScores[bowlIndex][gameNumber] = calculateScore.cumulScores[bowlIndex][9];
+			scoreCalculator.finalScores[bowlIndex][gameNumber] = scoreCalculator.cumulScores[bowlIndex][9];
 			addDate();
 		}
 	}
@@ -260,7 +260,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 		int myIndex = 0;
 		while (scoreIt.hasNext()){
 			Bowler thisBowler = (Bowler)scoreIt.next();
-			ScoreReport sr = new ScoreReport( thisBowler, calculateScore.finalScores[myIndex++], gameNumber );
+			ScoreReport sr = new ScoreReport( thisBowler, scoreCalculator.finalScores[myIndex++], gameNumber );
 
 			for (Object o : printVector) {
 				if (thisBowler.getNick() == o) {
@@ -292,7 +292,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 		try{
 			Date date = new Date();
 			String dateString = "" + date.getHours() + ":" + date.getMinutes() + " " + date.getMonth() + "/" + date.getDay() + "/" + (date.getYear() + 1900);
-			ScoreHistoryFile.addScore(currentThrower.getNick(), dateString, Integer.toString(calculateScore.cumulScores[bowlIndex][9]));
+			ScoreHistoryFile.addScore(currentThrower.getNick(), dateString, Integer.toString(scoreCalculator.cumulScores[bowlIndex][9]));
 		} catch (Exception e) {System.err.println("Exception in addScore. "+ e );}
 	}
 	
@@ -308,7 +308,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 	public void receivePinsetterEvent(PinsetterEvent pe) {
 		
 			if (pe.pinsDownOnThisThrow() >=  0) {			// this is a real throw
-				calculateScore.markScore(this,pe.getThrowNumber(),pe.pinsDownOnThisThrow());
+				scoreCalculator.markScore(this,pe.getThrowNumber(),pe.pinsDownOnThisThrow());
 
 				// next logic handles the ?: what conditions dont allow them another throw?
 				// handle the case of 10th frame first
@@ -351,7 +351,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 	 */
 	public LaneEvent lanePublish() {
 		Map<Object,Object> params = new HashMap<Object,Object>();
-		params.put("calculateScore",calculateScore);
+		params.put("calculateScore", scoreCalculator);
 		params.put("bowlIndex",bowlIndex);
 		params.put("currentThrower",currentThrower) ;
 		params.put("frameNumber",frameNumber+1);
@@ -367,7 +367,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 	 * @return true if party assigned, false otherwise
 	 */
 	public boolean isPartyAssigned() {
-		return calculateScore.partyAssigned;
+		return scoreCalculator.partyAssigned;
 	}
 
 	/**

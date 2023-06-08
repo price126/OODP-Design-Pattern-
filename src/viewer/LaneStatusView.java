@@ -79,7 +79,7 @@ public class LaneStatusView implements Serializable, ActionListener, LaneObserve
 	}
 
 	public void actionPerformed( ActionEvent e ) {
-		if (lane.calculateScore.partyAssigned) {
+		if (lane.scoreCalculator.partyAssigned) {
 			if (e.getSource().equals(viewPinSetter)) {
 				if (psShowing) {
 					psv.hide();
@@ -102,7 +102,7 @@ public class LaneStatusView implements Serializable, ActionListener, LaneObserve
 			}
 		}
 
-		if (e.getSource().equals(maintenance) && lane.calculateScore.partyAssigned) {
+		if (e.getSource().equals(maintenance) && lane.scoreCalculator.partyAssigned) {
 				lane.unPauseGame();
 				maintenance.setBackground( Color.GREEN );
 		}
@@ -113,7 +113,7 @@ public class LaneStatusView implements Serializable, ActionListener, LaneObserve
 		if ( le.mechProb ) {
 			maintenance.setBackground( Color.RED );
 		}
-		if (lane.calculateScore.partyAssigned) {
+		if (lane.scoreCalculator.partyAssigned) {
 			viewLane.setEnabled(true);
 			viewPinSetter.setEnabled(true);
 		} else {

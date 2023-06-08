@@ -12,7 +12,6 @@ import user.Party;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -83,7 +82,7 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 	}
 
 	public void receiveLaneEvent(LaneEvent le) {
-		if (!lane.calculateScore.partyAssigned) {
+		if (!lane.scoreCalculator.partyAssigned) {
 			return;
 		}
 

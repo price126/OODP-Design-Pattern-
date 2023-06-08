@@ -8,7 +8,7 @@ import user.Party;
 import java.io.Serializable;
 import java.util.HashMap;
 
-public class CalculateScore implements Serializable {
+public class ScoreCalculator implements Serializable {
     public final HashMap scores;
     public Party party;
     public boolean partyAssigned;
@@ -16,7 +16,7 @@ public class CalculateScore implements Serializable {
     public int[][] cumulScores;
     public int[][] finalScores;
 
-    public CalculateScore(){
+    public ScoreCalculator(){
 
         scores = new HashMap();
         partyAssigned = false;
@@ -38,12 +38,12 @@ public class CalculateScore implements Serializable {
      */
     public void resetScores(Party party) {
 
-        for (Object o : party.getMembers()) {
-            int[] toPut = new int[25];
+        for (Object obj : party.getMembers()) {
+            int[] inputNum = new int[25];
             for (int i = 0; i != 25; i++) {
-                toPut[i] = -1;
+                inputNum[i] = -1;
             }
-            scores.put(o, toPut);
+            scores.put(obj, inputNum);
         }
     }
 
@@ -62,16 +62,16 @@ public class CalculateScore implements Serializable {
         LaneSubscriber.publish(lane,lane.lanePublish());
     }
 
-    public boolean calculateSpareBool(int[] curScore,int i,int current){
+    public boolean isSpareCount(int[] curScore, int i, int current){
          return (i % 2 == 1 && curScore[i - 1] + curScore[i] == 10 && i < current - 1);
     }
 
-    public boolean calculateStrikeBool(int[] curScore,int i,int current){
+    public boolean isStrikeCount(int[] curScore, int i, int current){
          return (i < current && i % 2 == 0 && curScore[i] == 10);
     }
 
 
-    public void calculate18(int bowlIndex,int i,int[] curScore){
+    public void countScore18(int bowlIndex, int i, int[] curScore){
          if(i == 18){
             cumulScores[bowlIndex][9] += cumulScores[bowlIndex][8] + curScore[i];
         }
@@ -80,7 +80,7 @@ public class CalculateScore implements Serializable {
         }
     }
 
-    public void functionStrike(int i,int bowlIndex,int[] curScore){
+    public void strikeProcess(int i, int bowlIndex, int[] curScore){
         cumulScores[bowlIndex][i / 2] += 10;
         if (curScore[i + 1] != -1) {
             cumulScores[bowlIndex][i / 2] += curScore[i + 1] + curScore[i + 2] + cumulScores[bowlIndex][(i / 2) - 1];
@@ -99,7 +99,7 @@ public class CalculateScore implements Serializable {
         }
     }
 
-    public void functionNormalThrow(int i,int bowlIndex,int[] curScore){
+    public void normalThrowProcess(int i, int bowlIndex, int[] curScore){
         if(i == 0){
             cumulScores[bowlIndex][i / 2] += curScore[i];
         }
@@ -133,22 +133,22 @@ public class CalculateScore implements Serializable {
 
         for (int i = 0; i != current + 2; i++) {
             //Spare:
-            boolean spareBool = calculateSpareBool(curScore,i,current);
-            boolean strikeBool = calculateStrikeBool(curScore,i,current);
+            boolean isSpare = isSpareCount(curScore,i,current);
+            boolean isStrike = isStrikeCount(curScore,i,current);
 
-            if (spareBool) {
+            if (isSpare) {
                 cumulScores[bowlIndex][(i / 2)] += curScore[i + 1] + curScore[i];
             }
 
             else if(i >= 18){
-                calculate18(bowlIndex,i,curScore);
+                countScore18(bowlIndex,i,curScore);
             }
 
 
-            else if (strikeBool) {
+            else if (isStrike) {
                 if (curScore[i + 2] != -1) {
                     if (curScore[i + 3] != -1 || curScore[i + 4] != -1) {
-                        functionStrike(i,bowlIndex,curScore);
+                        strikeProcess(i,bowlIndex,curScore);
                     }
                     else {
                         break;
@@ -161,7 +161,7 @@ public class CalculateScore implements Serializable {
 
             else {
                 //We're dealing with a normal throw, add it and be on our way.
-                functionNormalThrow(i,bowlIndex,curScore);
+                normalThrowProcess(i,bowlIndex,curScore);
             }
         }
     }

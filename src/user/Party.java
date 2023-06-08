@@ -22,7 +22,7 @@ package user;/*
  *
  */
 
-import game.CalculateScore;
+import game.ScoreCalculator;
 import lane.Lane;
 
 import java.io.Serializable;
@@ -74,16 +74,16 @@ public class Party implements Serializable {
 	 *
 	 */
 	public void assignParty( Lane curLane ) {
-		curLane.calculateScore.party = this;
+		curLane.scoreCalculator.party = this;
 		resetBowlerIterator(curLane);
-		curLane.calculateScore.partyAssigned = true;
+		curLane.scoreCalculator.partyAssigned = true;
 
-		curLane.calculateScore.curScores = new int[myBowlers.size()];
-		curLane.calculateScore.cumulScores = new int[myBowlers.size()][10];
-		curLane.calculateScore.finalScores = new int[myBowlers.size()][128]; //Hardcoding a max of 128 games, bite me.
+		curLane.scoreCalculator.curScores = new int[myBowlers.size()];
+		curLane.scoreCalculator.cumulScores = new int[myBowlers.size()][10];
+		curLane.scoreCalculator.finalScores = new int[myBowlers.size()][128]; //Hardcoding a max of 128 games, bite me.
 		curLane.gameNumber = 0;
 
-		curLane.calculateScore.resetScores(this);
+		curLane.scoreCalculator.resetScores(this);
 		curLane.gameFinished = false;
 		curLane.frameNumber = 0;
 	}
@@ -94,7 +94,7 @@ public class Party implements Serializable {
 		curLane.setter.foul = (boolean) resumeLane.get(3);
 		curLane.setter.throwNumber = (int) resumeLane.get(4);
 
-		curLane.calculateScore = (CalculateScore) resumeLane.get(5);
+		curLane.scoreCalculator = (ScoreCalculator) resumeLane.get(5);
 		resetBowlerIterator(curLane);
 
 		curLane.gameIsHalted = false;

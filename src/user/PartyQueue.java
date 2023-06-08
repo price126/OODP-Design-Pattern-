@@ -3,7 +3,7 @@ package user;
 import control.ControlDesk;
 import control.ControlDeskEvent;
 import control.ControlDeskSubscriber;
-import game.CalculateScore;
+import game.ScoreCalculator;
 import lane.Lane;
 
 import java.util.Iterator;
@@ -22,7 +22,7 @@ public class PartyQueue {
         while (it.hasNext() && controlDesk.partyQueue.hasMoreElements()) {
             Lane curLane = (Lane) it.next();
 
-            if (!curLane.calculateScore.partyAssigned) {
+            if (!curLane.scoreCalculator.partyAssigned) {
                 System.out.println("ok... assigning this party");
                 ((Party) controlDesk.partyQueue.next()).assignParty(curLane);
             }
@@ -51,7 +51,7 @@ public class PartyQueue {
 
     public static void resumePartyQueue(ControlDesk controlDesk, Vector lane) {
         Vector v = new Vector<>();
-        v.add(((CalculateScore)(lane.get(5))).party);
+        v.add(((ScoreCalculator)(lane.get(5))).party);
         v.add(lane);
         controlDesk.pausePartyQueue.add(v);
         ControlDeskSubscriber.publish(controlDesk,new ControlDeskEvent(getPartyQueue(controlDesk)));
