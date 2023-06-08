@@ -5,17 +5,17 @@ import user.Bowler;
 import javax.swing.*;
 import java.awt.*;
 
-public class BallGridView {
+public class BallAndScore {
     public static void BallGrid(int i, LaneView laneview){
         int val = 9,val2=18;
         for (int j = 0; j != val; j++) {
-            laneview.ballGrid[i][j] = ViewComponents.GridLayoutPanel(0,3);
+            laneview.ballGrid[i][j] = CustomView. createGridLayoutPanel(0,3);
             laneview.ballGrid[i][j].add(new JLabel("  "), BorderLayout.EAST);
             laneview.ballGrid[i][j].add(laneview.balls[i][2 * j], BorderLayout.EAST);
             laneview.ballGrid[i][j].add(laneview.balls[i][2 * j + 1], BorderLayout.EAST);
         }
 
-        laneview.ballGrid[i][val] = ViewComponents.GridLayoutPanel(0,3);
+        laneview.ballGrid[i][val] = CustomView. createGridLayoutPanel(0,3);
         laneview.ballGrid[i][val].add(laneview.balls[i][val2]);
         laneview.ballGrid[i][val].add(laneview.balls[i][val2+1]);
         laneview.ballGrid[i][val].add(laneview.balls[i][val2+2]);

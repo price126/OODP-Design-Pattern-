@@ -71,9 +71,9 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 		pins = new JPanel[numBowlers];
 
 		for (int i = 0; i != numBowlers; i++) {
-			BallGridView.BallLabel(i,this);
-			BallGridView.BallGrid(i,this);
-			BallGridView.setpinscore(i,this);
+			BallAndScore.BallLabel(i,this);
+			BallAndScore.BallGrid(i,this);
+			BallAndScore.setpinscore(i,this);
 			panel.add(pins[i]);
 		}
 
@@ -102,8 +102,8 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 			cpanel.add(makeFrame(le.getParty()), "Center");
 
 			// Button Panel
-			JPanel buttonPanel = ViewComponents.FlowLayoutPanel();
-			maintenance = ViewComponents.MakeButtons("Maintenance Call",buttonPanel);
+			JPanel buttonPanel = CustomView.createFlowLayoutPanel();
+			maintenance = CustomView.createButtonInPanel("Maintenance Call",buttonPanel);
 			maintenance.addActionListener(this);
 
 			cpanel.add(buttonPanel, "South");

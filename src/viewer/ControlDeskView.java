@@ -46,22 +46,21 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 		this.maxMembers = maxMembers;
 		int numLanes = controlDesk.getNumLanes();
 
-		win = ViewComponents.MakeWindow("Control Desk");
+		win = CustomView.createWindow("Control Desk");
 
-		JPanel colPanel = ViewComponents.MakeMainPanel();
+		JPanel colPanel = CustomView.createMainPanel();
 
 		// Controls Panel
-		JPanel controlsPanel = ViewComponents.MakePanel(5,1,"Controls");
+		JPanel controlsPanel = CustomView.createTitledBorderPanel(5,1,"Controls");
 
 		//Buttons
-		addParty = ViewComponents.MakeButtons("Add Party",controlsPanel);
+		addParty = CustomView.createButtonInPanel("Add Party",controlsPanel);
 		addParty.addActionListener(this);
-		//resume = ViewComponents.MakeButtons("Resume games",controlsPanel);
-		//resume.addActionListener(this);
-		finished = ViewComponents.MakeButtons("Finished",controlsPanel);
+		finished = CustomView.createButtonInPanel("Finished",controlsPanel);
 		finished.addActionListener(this);
+
 		// Lane Status Panel
-		JPanel laneStatusPanel = ViewComponents.MakePanel(numLanes,1,"Lane Status");
+		JPanel laneStatusPanel = CustomView.createTitledBorderPanel(numLanes,1,"Lane Status");
 
 		HashSet lanes=controlDesk.getLanes();
 		Iterator it = lanes.iterator();
@@ -80,7 +79,7 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 		}
 
 		// Party user.Queue Panel
-		JPanel partyPanel = ViewComponents.FlowLayoutPanel();
+		JPanel partyPanel = CustomView.createFlowLayoutPanel();
 		partyPanel.setBorder(new TitledBorder("Party user.Queue"));
 
 		Vector empty = new Vector();
@@ -99,7 +98,7 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 		colPanel.add(laneStatusPanel, "Center");
 		colPanel.add(partyPanel, "West");
 
-		ViewComponents.AddContentsToWindow(win,colPanel);
+		CustomView.addContentsOnWindow(win,colPanel);
 
 		/* Close program when this window closes */
 		win.addWindowListener(new WindowAdapter() {
@@ -109,7 +108,7 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 		});
 
 		// Center Window on Screen
-		ViewComponents.SetWindowPosition(win);
+		CustomView.setWindowCentered(win);
 	}
 
 	/**
@@ -127,36 +126,6 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 			win.setVisible(false);
 			System.exit(0);
 		}
-		//else if (e.getSource().equals(resume)) {
-		//	try {
-		//		ResumeView resumeView = new ResumeView(controlDesk);
-		//	} catch (IOException ex) {
-		//		ex.printStackTrace();
-		//	} catch (ClassNotFoundException ex) {
-		//		ex.printStackTrace();
-		//	}
-//			try {
-//
-//				Vector<Boolean> returnedFlags = lane.PausedLanesFile.readPausedLanesFlags();
-//				Vector<Party> returnedParties = lane.PausedLanesFile.readPausedLanesParties();
-//				Vector<HashMap> returnedScores = lane.PausedLanesFile.readPausedLanesScores();
-//
-//
-//			} catch (IOException ex) {
-//				ex.printStackTrace();
-//			} catch (ClassNotFoundException ex) {
-//				ex.printStackTrace();
-//			}
-//			Iterator it = returnedParty.iterator();
-//			while (it.hasNext()) {
-//				Party obj = (Party) it.next();
-//				for (Object o: obj.getMembers())
-//				{
-//					Bowler a = (Bowler) o;
-//					System.out.print(a.getNick()+" ");
-//				}
-//				System.out.println();
-//		}
 	}
 
 	/**

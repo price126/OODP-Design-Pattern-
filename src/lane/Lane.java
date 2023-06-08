@@ -214,7 +214,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 				String partyName = ((Bowler) scoreCalculator.party.getMembers().get(0)).getNickName() + "'s Party";
 				EndGamePrompt egp = new EndGamePrompt(partyName);
 				int result = egp.getResult();
-				egp.distroy();
+				egp.destroy();
 
 				System.out.println("result was: " + result);
 
