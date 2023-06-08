@@ -53,7 +53,7 @@ public class PartyQueue {
         Vector v = new Vector<>();
         v.add(((ScoreCalculator)(lane.get(5))).party);
         v.add(lane);
-        controlDesk.pausePartyQueue.add(v);
+        controlDesk.stopPartyQueue.add(v);
         ControlDeskSubscriber.publish(controlDesk,new ControlDeskEvent(getPartyQueue(controlDesk)));
     }
 
