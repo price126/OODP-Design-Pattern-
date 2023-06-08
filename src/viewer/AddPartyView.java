@@ -40,7 +40,7 @@ import java.util.*;
  *  
  */
 
-public class AddPartyView implements AddPartyViewInterface, ActionListener, ListSelectionListener {
+public class AddPartyView implements ActionListener, ListSelectionListener {
 
 	private final int maxSize;
 
@@ -57,12 +57,12 @@ public class AddPartyView implements AddPartyViewInterface, ActionListener, List
 		this.controlDesk = controlDesk;
 		maxSize = max;
 
-		win = ViewComponents.MakeWindow("Add Party");
+		win = CustomView.createWindow("Add Party");
 
-		JPanel colPanel = ViewComponents.GridLayoutPanel(1,3);
+		JPanel colPanel = CustomView.createGridLayoutPanel(1,3);
 
 		// Party Panel
-		JPanel partyPanel = ViewComponents.FlowLayoutPanel();
+		JPanel partyPanel = CustomView.createFlowLayoutPanel();
 		partyPanel.setBorder(new TitledBorder("Your Party"));
 
 		party = new Vector();
@@ -97,15 +97,15 @@ public class AddPartyView implements AddPartyViewInterface, ActionListener, List
 		bowlerPanel.add(bowlerPane);
 
 		// Button Panel
-		JPanel buttonPanel = ViewComponents.GridLayoutPanel(4,1);
+		JPanel buttonPanel = CustomView.createGridLayoutPanel(4,1);
 
-		addPatron = ViewComponents.MakeButtons("Add to Party",buttonPanel);
+		addPatron = CustomView.createButtonInPanel("Add to Party",buttonPanel);
 		addPatron.addActionListener(this);
-		remPatron = ViewComponents.MakeButtons("Remove Member",buttonPanel);
+		remPatron = CustomView.createButtonInPanel("Remove Member",buttonPanel);
 		remPatron.addActionListener(this);
-		newPatron = ViewComponents.MakeButtons("New Patron",buttonPanel);
+		newPatron = CustomView.createButtonInPanel("New Patron",buttonPanel);
 		newPatron.addActionListener(this);
-		finished = ViewComponents.MakeButtons("Finished",buttonPanel);
+		finished = CustomView.createButtonInPanel("Finished",buttonPanel);
 		finished.addActionListener(this);
 
 		// Clean up main panel
@@ -113,15 +113,15 @@ public class AddPartyView implements AddPartyViewInterface, ActionListener, List
 		colPanel.add(bowlerPanel);
 		colPanel.add(buttonPanel);
 
-		ViewComponents.AddContentsToWindow(win,colPanel);
+		CustomView.addContentsOnWindow(win,colPanel);
 		// Center Window on Screen
-		ViewComponents.SetWindowPosition(win);
+		CustomView.setWindowCentered(win);
 
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(addPatron)) {
-			funAddPatron();
+			checkPatronJoined();
 		}
 
 		if (e.getSource().equals(remPatron)) {
@@ -141,7 +141,7 @@ public class AddPartyView implements AddPartyViewInterface, ActionListener, List
 		}
 	}
 
-	public void funAddPatron(){
+	public void checkPatronJoined(){
 		if (selectedNick != null && party.size() < maxSize) {
 			if (party.contains(selectedNick)) {
 				System.err.println("Member already in Party");

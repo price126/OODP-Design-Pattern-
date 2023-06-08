@@ -47,7 +47,7 @@ public class LaneStatusView implements Serializable, ActionListener, LaneObserve
 		lv = new LaneView( lane, laneNum );
 		LaneSubscriber.subscribe(lane,lv);
 
-		jp = ViewComponents.FlowLayoutPanel();
+		jp = CustomView.createFlowLayoutPanel();
 		JLabel cLabel = new JLabel( "Now Bowling: " );
 		curBowler = new JLabel( "(no one)" );
 		JLabel pdLabel = new JLabel( "Pins Down: " );
@@ -57,12 +57,12 @@ public class LaneStatusView implements Serializable, ActionListener, LaneObserve
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 
-		viewLane = ViewComponents.MakeButtons("View Lane",buttonPanel);
+		viewLane = CustomView.createButtonInPanel("View Lane",buttonPanel);
 		viewLane.addActionListener(this);
-		viewPinSetter = ViewComponents.MakeButtons("Pinsetter",buttonPanel);
+		viewPinSetter = CustomView.createButtonInPanel("Pinsetter",buttonPanel);
 		viewPinSetter.addActionListener(this);
 
-		maintenance = ViewComponents.MakeButtons(" ",buttonPanel);
+		maintenance = CustomView.createButtonInPanel(" ",buttonPanel);
         maintenance.addActionListener(this);
 		maintenance.setBackground(Color.GREEN);
 

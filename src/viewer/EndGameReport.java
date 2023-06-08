@@ -33,12 +33,12 @@ public class EndGameReport implements ActionListener, ListSelectionListener {
 		result =0;
 		retVal = new Vector();
 
-		win = ViewComponents.MakeWindow("End Game Report for " + partyName + "?" );
+		win = CustomView.createWindow("End Game Report for " + partyName + "?" );
 
-		JPanel colPanel = ViewComponents.GridLayoutPanel(1,2);
+		JPanel colPanel = CustomView.createGridLayoutPanel(1,2);
 
 		// Member Panel
-		JPanel partyPanel = ViewComponents.FlowLayoutPanel();
+		JPanel partyPanel = CustomView.createFlowLayoutPanel();
 		partyPanel.setBorder(new TitledBorder("Party Members"));
 		
 		Vector myVector = new Vector();
@@ -55,21 +55,21 @@ public class EndGameReport implements ActionListener, ListSelectionListener {
 		partyPanel.add(memberList);
 
 		// Button Panel
-		JPanel buttonPanel = ViewComponents.GridLayoutPanel(2,1);
+		JPanel buttonPanel = CustomView.createGridLayoutPanel(2,1);
 
-		printButton = ViewComponents.MakeButtons("PrintReport",buttonPanel);
+		printButton = CustomView.createButtonInPanel("PrintReport",buttonPanel);
 		printButton.addActionListener(this);
-		finished = ViewComponents.MakeButtons("Finished",buttonPanel);
+		finished = CustomView.createButtonInPanel("Finished",buttonPanel);
 		finished.addActionListener(this);
 
 		// Clean up main panel
 		colPanel.add(partyPanel);
 		colPanel.add(buttonPanel);
 
-		ViewComponents.AddContentsToWindow(win,colPanel);
+		CustomView.addContentsOnWindow(win,colPanel);
 
 		// Center Window on Screen
-		ViewComponents.SetWindowPosition(win);
+		CustomView.setWindowCentered(win);
 	}
 
 	public void actionPerformed(ActionEvent e) {

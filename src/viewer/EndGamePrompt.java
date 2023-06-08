@@ -23,33 +23,33 @@ public class EndGamePrompt implements ActionListener {
 	public EndGamePrompt( String partyName ) {
 
 		result =0;
-		win = ViewComponents.MakeWindow("Another Game for " + partyName + "?" );
+		win = CustomView.createWindow("Another Game for " + partyName + "?" );
 
-		JPanel colPanel = ViewComponents.GridLayoutPanel(2,1);
+		JPanel colPanel = CustomView.createGridLayoutPanel(2,1);
 
 		// Label Panel
-		JPanel labelPanel = ViewComponents.FlowLayoutPanel();
+		JPanel labelPanel = CustomView.createFlowLayoutPanel();
 		JLabel message = new JLabel( "Party " + partyName
 			+ " has finished bowling.\nWould they like to bowl another game?" );
 
 		labelPanel.add( message );
 
 		// Button
-		JPanel buttonPanel  = ViewComponents.GridLayoutPanel(1,2);
+		JPanel buttonPanel  = CustomView.createGridLayoutPanel(1,2);
 
-		yesButton = ViewComponents.MakeButtons("Yes",buttonPanel);
+		yesButton = CustomView.createButtonInPanel("Yes",buttonPanel);
 		yesButton.addActionListener(this);
-		noButton = ViewComponents.MakeButtons("No",buttonPanel);
+		noButton = CustomView.createButtonInPanel("No",buttonPanel);
 		noButton.addActionListener(this);
 
 		// Clean up main panel
 		colPanel.add(labelPanel);
 		colPanel.add(buttonPanel);
 
-		ViewComponents.AddContentsToWindow(win,colPanel);
+		CustomView.addContentsOnWindow(win,colPanel);
 
 		// Center Window on Screen
-		ViewComponents.SetWindowPosition(win);
+		CustomView.setWindowCentered(win);
 
 	}
 
@@ -74,7 +74,7 @@ public class EndGamePrompt implements ActionListener {
 		return result;	
 	}
 	
-	public void distroy() {
+	public void destroy() {
 		win.setVisible(false);
 	}
 	

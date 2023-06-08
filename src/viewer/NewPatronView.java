@@ -39,34 +39,34 @@ public class NewPatronView implements ActionListener {
 		addParty=v;	
 		done = false;
 
-		win = ViewComponents.MakeWindow("Add Patron");
+		win = CustomView.createWindow("Add Patron");
 
-		JPanel colPanel = ViewComponents.MakeMainPanel();
+		JPanel colPanel = CustomView.createMainPanel();
 
 		// Patron Panel
-		JPanel patronPanel = ViewComponents.MakePanel(3,1,"Your Info");
+		JPanel patronPanel = CustomView.createTitledBorderPanel(3,1,"Your Info");
 
 		// Controls Panel
-		nickField = ViewComponents.MakeField("Nick Name",patronPanel);
-		fullField = ViewComponents.MakeField("Full Name",patronPanel);
-		emailField = ViewComponents.MakeField("E-Mail",patronPanel);
+		nickField = CustomView.createTextFieldWithLabel("Nick Name",patronPanel);
+		fullField = CustomView.createTextFieldWithLabel("Full Name",patronPanel);
+		emailField = CustomView.createTextFieldWithLabel("E-Mail",patronPanel);
 
 		// Button Panel
-		JPanel buttonPanel = ViewComponents.MakePanel(4,1,"Buttons");
+		JPanel buttonPanel = CustomView.createTitledBorderPanel(4,1,"Buttons");
 		Insets buttonMargin = new Insets(4, 4, 4, 4);
 
-		finished = ViewComponents.MakeButtons("Add Patron",buttonPanel);
+		finished = CustomView.createButtonInPanel("Add Patron",buttonPanel);
 		finished.addActionListener(this);
-		abort = ViewComponents.MakeButtons("Abort",buttonPanel);
+		abort = CustomView.createButtonInPanel("Abort",buttonPanel);
 		abort.addActionListener(this);
 
 		// Clean up main panel
 		colPanel.add(patronPanel, "Center");
 		colPanel.add(buttonPanel, "East");
 
-		ViewComponents.AddContentsToWindow(win,colPanel);
+		CustomView.addContentsOnWindow(win,colPanel);
 		// Center Window on Screen
-		ViewComponents.SetWindowPosition(win);
+		CustomView.setWindowCentered(win);
 
 	}
 
@@ -81,7 +81,6 @@ public class NewPatronView implements ActionListener {
 			full = fullField.getText();
 			email = emailField.getText();
 			done = true;
-//			addParty.updateNewPatron( this );
 			updateNewPatron(this,addParty);
 			win.setVisible(false);
 		}
@@ -107,7 +106,7 @@ public class NewPatronView implements ActionListener {
 				addParty.party.add(newPatron.getNick());
 				addParty.partyList.setListData(addParty.party);
 			} else {
-				System.err.println( "A Bowler with that name already exists." );
+				System.err.println( "Same name already exists." );
 			}
 		} catch (Exception e2) {
 			System.err.println("File I/O Error");
