@@ -45,12 +45,12 @@ public class LaneEvent implements Serializable, LaneEventInterface{
 
 
 	public LaneEvent(Map<Object,Object> params){
-		ScoreCalculator calculatescore = (ScoreCalculator) params.get("calculateScore");
-		p = calculatescore.party;
+		ScoreCalculator scoreCalculator = (ScoreCalculator) params.get("calculateScore");
+		p = scoreCalculator.party;
 		index = (int) params.get("bowlIndex");
 		bowler = (Bowler) params.get("currentThrower");
-		cumulScore = calculatescore.cumulScores;
-		score = calculatescore.scores;
+		cumulScore = scoreCalculator.cumulScores;
+		score = scoreCalculator.scores;
 		frameNum = (int) params.get("frameNumber");
 		ball = (int) params.get("ball");
 		mechProb = (boolean) params.get("gameIsHalted");

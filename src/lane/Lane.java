@@ -142,9 +142,6 @@ import java.util.*;
 public class Lane extends Thread implements Serializable, PinsetterObserver,LaneInterface{
 	public final Pinsetter setter;
 	public final Vector subscribers;
-
-	public ScoreCalculator scoreCalculator;
-	
 	public boolean gameIsHalted;
 	public boolean gameFinished;
 	public Iterator bowlerIterator;
@@ -155,6 +152,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 	public boolean canThrowAgain;
 	public int gameNumber;
 	public Bowler currentThrower;			// = the thrower who just took a throw
+	public ScoreCalculator scoreCalculator;
 
 	/** Lane()
 	 * 
@@ -166,9 +164,12 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 	public Lane() { 
 		setter = new Pinsetter();
 		subscribers = new Vector();
+
 		scoreCalculator = new ScoreCalculator();
+
 		gameIsHalted = false;
 		gameNumber = 0;
+
 		PinsetterSubscriber.subscribe(setter,this);
 		this.start();
 	}
@@ -181,7 +182,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 		while (true) {
 			if (scoreCalculator.partyAssigned && !gameFinished) {	// we have a party on this lane,
 								// so next bower can take a throw
-				checkGameHalted();
+				checkGameIsHalted();
 
 				if (bowlerIterator.hasNext()) {
 					currentThrower = (Bowler)bowlerIterator.next();
@@ -189,9 +190,9 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 					tenthFrameStrike = false;
 					ball = 0;
 
-					simulateBallHiting();
+					simulateHitting();
 
-					checkframenine();
+					checkFrameNum();
 
 
 					setter.reset();
@@ -236,16 +237,17 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 					sendScore(scoreIt,printVector);
 				}
 			}
-			
+
 			sleep();
 		}
 	}
 
-	public void checkframenine(){
+	public void checkFrameNum(){
 		if (frameNumber == 9){
 			scoreCalculator.finalScores[bowlIndex][gameNumber] = scoreCalculator.cumulScores[bowlIndex][9];
-			addDate();
+			addCurrentDate();
 		}
+
 	}
 
 	public void sleep(){
@@ -271,14 +273,14 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 		}
 	}
 
-	public void simulateBallHiting(){
+	public void simulateHitting(){
 		while (canThrowAgain) {
 			setter.ballThrown();		// simulate the thrower's ball hiting
 			ball++;
 		}
 	}
 
-	public void checkGameHalted(){
+	public void checkGameIsHalted(){
 		while (gameIsHalted) {
 			try {
 				sleep(10);
@@ -288,7 +290,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 		}
 	}
 
-	public void addDate(){
+	public void addCurrentDate(){
 		try{
 			Date date = new Date();
 			String dateString = "" + date.getHours() + ":" + date.getMinutes() + " " + date.getMonth() + "/" + date.getDay() + "/" + (date.getYear() + 1900);
@@ -320,7 +322,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 						}
 					}
 
-					checkThrowAgain(pe);
+					checkcanThrowAgain(pe);
 
 				} else { // its not the 10th frame
 			
@@ -334,7 +336,7 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 			}  //  this is not a real throw, probably a reset
 	}
 
-	public void checkThrowAgain(PinsetterEvent pe){
+	public void checkcanThrowAgain(PinsetterEvent pe){
 		if ((pe.totalPinsDown() != 10) && (pe.getThrowNumber() == 2 && !tenthFrameStrike)) {
 			canThrowAgain = false;
 		}
@@ -350,26 +352,18 @@ public class Lane extends Thread implements Serializable, PinsetterObserver,Lane
 	 * @return		The new lane event
 	 */
 	public LaneEvent lanePublish() {
-		Map<Object,Object> params = new HashMap<Object,Object>();
+		Map<Object,Object> params = new HashMap<>();
+
 		params.put("calculateScore", scoreCalculator);
 		params.put("bowlIndex",bowlIndex);
 		params.put("currentThrower",currentThrower) ;
 		params.put("frameNumber",frameNumber+1);
 		params.put("ball",ball);
 		params.put("gameIsHalted",gameIsHalted);
+
 		return new LaneEvent(params);
 	}
-
-	/** isPartyAssigned()
-	 *
-	 * checks if a party is assigned to this lane
-	 *
-	 * @return true if party assigned, false otherwise
-	 */
-	public boolean isPartyAssigned() {
-		return scoreCalculator.partyAssigned;
-	}
-
+	
 	/**
 	 * Pause the execution of this game
 	 */
