@@ -73,7 +73,7 @@ public class LaneView implements Serializable, LaneObserver, ActionListener {
 		for (int i = 0; i != numBowlers; i++) {
 			BallAndScore.BallLabel(i,this);
 			BallAndScore.BallGrid(i,this);
-			BallAndScore.setpinscore(i,this);
+			BallAndScore.setPinScore(i,this);
 			panel.add(pins[i]);
 		}
 

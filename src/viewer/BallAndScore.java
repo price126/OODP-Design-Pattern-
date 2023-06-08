@@ -6,48 +6,49 @@ import javax.swing.*;
 import java.awt.*;
 
 public class BallAndScore {
-    public static void BallGrid(int i, LaneView laneview){
-        int val = 9,val2=18;
-        for (int j = 0; j != val; j++) {
-            laneview.ballGrid[i][j] = CustomView. createGridLayoutPanel(0,3);
-            laneview.ballGrid[i][j].add(new JLabel("  "), BorderLayout.EAST);
-            laneview.ballGrid[i][j].add(laneview.balls[i][2 * j], BorderLayout.EAST);
-            laneview.ballGrid[i][j].add(laneview.balls[i][2 * j + 1], BorderLayout.EAST);
-        }
 
-        laneview.ballGrid[i][val] = CustomView. createGridLayoutPanel(0,3);
-        laneview.ballGrid[i][val].add(laneview.balls[i][val2]);
-        laneview.ballGrid[i][val].add(laneview.balls[i][val2+1]);
-        laneview.ballGrid[i][val].add(laneview.balls[i][val2+2]);
-    }
-
-    public static void BallLabel(int i, LaneView laneview){
+    public static void BallLabel(int i, LaneView lv){
         int val = 23;
         for (int j = 0; j != val; j++) {
-            laneview.ballLabel[i][j] = new JLabel(" ");
-            laneview.balls[i][j] = new JPanel();
-            laneview.balls[i][j].setBorder(
+            lv.ballLabel[i][j] = new JLabel(" ");
+            lv.balls[i][j] = new JPanel();
+            lv.balls[i][j].setBorder(
                     BorderFactory.createLineBorder(Color.BLACK));
-            laneview.balls[i][j].add(laneview.ballLabel[i][j]);
+            lv.balls[i][j].add(lv.ballLabel[i][j]);
         }
     }
 
-    public static void setpinscore(int i,LaneView laneview){
-        laneview.pins[i] = new JPanel();
-        laneview.pins[i].setBorder(
+    public static void BallGrid(int i, LaneView lv){
+        int val = 9,val2=18;
+        for (int j = 0; j != val; j++) {
+            lv.ballGrid[i][j] = CustomView. createGridLayoutPanel(0,3);
+            lv.ballGrid[i][j].add(new JLabel("  "), BorderLayout.EAST);
+            lv.ballGrid[i][j].add(lv.balls[i][2 * j], BorderLayout.EAST);
+            lv.ballGrid[i][j].add(lv.balls[i][2 * j + 1], BorderLayout.EAST);
+        }
+
+        lv.ballGrid[i][val] = CustomView. createGridLayoutPanel(0,3);
+        lv.ballGrid[i][val].add(lv.balls[i][val2]);
+        lv.ballGrid[i][val].add(lv.balls[i][val2+1]);
+        lv.ballGrid[i][val].add(lv.balls[i][val2+2]);
+    }
+
+    public static void setPinScore(int i,LaneView lv){
+        lv.pins[i] = new JPanel();
+        lv.pins[i].setBorder(
                 BorderFactory.createTitledBorder(
-                        ((Bowler) laneview.bowlers.get(i)).getNick()));
-        laneview.pins[i].setLayout(new GridLayout(0, 10));
+                        ((Bowler) lv.bowlers.get(i)).getNick()));
+        lv.pins[i].setLayout(new GridLayout(0, 10));
 
         for (int k = 0; k != 10; k++) {
-            laneview.scores[i][k] = new JPanel();
-            laneview.scoreLabel[i][k] = new JLabel("  ", SwingConstants.CENTER);
-            laneview.scores[i][k].setBorder(
+            lv.scores[i][k] = new JPanel();
+            lv.scoreLabel[i][k] = new JLabel("  ", SwingConstants.CENTER);
+            lv.scores[i][k].setBorder(
                     BorderFactory.createLineBorder(Color.BLACK));
-            laneview.scores[i][k].setLayout(new GridLayout(0, 1));
-            laneview.scores[i][k].add(laneview.ballGrid[i][k], BorderLayout.EAST);
-            laneview.scores[i][k].add(laneview.scoreLabel[i][k], BorderLayout.SOUTH);
-            laneview.pins[i].add(laneview.scores[i][k], BorderLayout.EAST);
+            lv.scores[i][k].setLayout(new GridLayout(0, 1));
+            lv.scores[i][k].add(lv.ballGrid[i][k], BorderLayout.EAST);
+            lv.scores[i][k].add(lv.scoreLabel[i][k], BorderLayout.SOUTH);
+            lv.pins[i].add(lv.scores[i][k], BorderLayout.EAST);
         }
     }
 }
