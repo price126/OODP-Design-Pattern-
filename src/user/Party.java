@@ -88,27 +88,7 @@ public class Party implements Serializable {
 		curLane.frameNumber = 0;
 	}
 
-	public void assignPausedParty( Lane curLane , Vector resumeLane) {
-		curLane.setter.rnd = (Random) resumeLane.get(1);
-		curLane.setter.pins  = (boolean[]) resumeLane.get(2);
-		curLane.setter.foul = (boolean) resumeLane.get(3);
-		curLane.setter.throwNumber = (int) resumeLane.get(4);
 
-		curLane.scoreCalculator = (ScoreCalculator) resumeLane.get(5);
-		resetBowlerIterator(curLane);
-
-		curLane.gameIsHalted = false;
-
-		curLane.gameFinished = (boolean) resumeLane.get(7);
-		curLane.ball = (int) resumeLane.get(8);
-		curLane.bowlIndex = 0;
-		curLane.frameNumber = (int) resumeLane.get(10);
-		curLane.tenthFrameStrike = (boolean) resumeLane.get(11);
-		curLane.canThrowAgain = (boolean) resumeLane.get(12);
-		curLane.gameNumber = (int) resumeLane.get(13);
-		curLane.currentThrower = (Bowler) resumeLane.get(14);
-		System.out.println(curLane.frameNumber + " " + curLane.bowlIndex + " " + curLane.ball);
-	}
 
 
 

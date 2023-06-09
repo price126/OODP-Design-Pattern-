@@ -51,20 +51,7 @@ public class Bowler implements BowlerInterface, Serializable {
 	}
 
 	public String getEmail ( ) {
-		return email;	
+		return email;
 	}
-	
-	public boolean equals ( Bowler b) {
-		boolean retval = true;
-		if ( !(nickName.equals(b.getNickName())) ) {
-				retval = false;
-		}
-		else if ( !(fullName.equals(b.getFullName())) ) {
-				retval = false;
-		}	
-		else if ( !(email.equals(b.getEmail())) ) {
-				retval = false;
-		}
-		return retval;
-	}
+
 }

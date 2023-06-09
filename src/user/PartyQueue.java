@@ -41,7 +41,7 @@ public class PartyQueue {
     public static void addPartyQueue(ControlDesk controlDesk, Vector partyNicks) {
         Vector partyBowlers = new Vector();
         for (Object partyNick : partyNicks) {
-            Bowler newBowler = BowlerFile.registerPatron(((String) partyNick));
+            Bowler newBowler = BowlerFile.findBowlerByName(((String) partyNick));
             partyBowlers.add(newBowler);
         }
         Party newParty = new Party(partyBowlers);
@@ -49,13 +49,6 @@ public class PartyQueue {
         ControlDeskSubscriber.publish(controlDesk,new ControlDeskEvent(getPartyQueue(controlDesk)));
     }
 
-    public static void resumePartyQueue(ControlDesk controlDesk, Vector lane) {
-        Vector v = new Vector<>();
-        v.add(((ScoreCalculator)(lane.get(5))).party);
-        v.add(lane);
-        controlDesk.stopPartyQueue.add(v);
-        ControlDeskSubscriber.publish(controlDesk,new ControlDeskEvent(getPartyQueue(controlDesk)));
-    }
 
     /**
      * Returns a Vector of party names to be displayed in the GUI representation of the wait queue.

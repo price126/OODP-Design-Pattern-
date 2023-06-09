@@ -25,7 +25,7 @@ import java.io.*;
 public class BowlerFile {
 
 	/** The location of the bowler database */
-	private static final String BOWLER_DAT = "C:\\Users\\pc\\Desktop\\OODP_TP\\src\\user\\BOWLERS.DAT";
+	private static final String BOWLER_DAT = "C:\\Users\\whdbs\\Desktop\\객설패\\bowling\\src\\user\\BOWLERS.DAT";
 
     /**
      * Retrieves bowler information from the database and returns a Bowler objects with populated fields.
@@ -114,7 +114,7 @@ public class BowlerFile {
 	 *
 	 */
 
-	public static Bowler registerPatron(String nickName) {
+	public static Bowler findBowlerByName(String nickName) {
 		Bowler patron = null;
 
 		try {
