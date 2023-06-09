@@ -114,7 +114,7 @@ public class BowlerFile {
 	 *
 	 */
 
-	public static Bowler registerPatron(String nickName) {
+	public static Bowler findBowlerByName(String nickName) {
 		Bowler patron = null;
 
 		try {
