@@ -11,7 +11,7 @@ import java.io.*;
 
 public class ScoreHistoryFile {
 
-	private static final String SCOREHISTORY_DAT = "./src/SCOREHISTORY.DAT";
+	private static final String SCOREHISTORY_DAT = "C:\\Users\\hp\\Desktop\\가마우지\\src\\game\\SCOREHISTORY.DAT";
 
 	public static void addScore(String nick, String date, String score)
 			throws IOException {
@@ -41,5 +41,25 @@ public class ScoreHistoryFile {
 		}
 		return scores;
 	}
-}
+	
 
+	
+	public static double averageScore(String nick) {
+		Vector scores = null;
+		try{
+			scores = getScores(nick);
+		} catch (Exception e){System.err.println("Error: " + e);}
+
+		assert scores != null;
+		Iterator scoreIt = scores.iterator();
+
+		double sum = 0, count = 0;
+		while (scoreIt.hasNext()) {
+			Score score = (Score) scoreIt.next();
+			sum = sum + (double)Integer.parseInt(score.getScore());
+			count = count + 1.0;
+		}
+
+		return sum/count;
+	}
+}
