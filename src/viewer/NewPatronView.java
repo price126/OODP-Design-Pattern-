@@ -96,7 +96,7 @@ public class NewPatronView implements ActionListener {
 
 	public void updateNewPatron(NewPatronView newPatron,AddPartyView addParty) {
 		try {
-			Bowler checkBowler = BowlerFile.getBowlerInfo( newPatron.getNick() );
+			Bowler checkBowler = BowlerFile.getBowlerInfoByName( newPatron.getNick() );
 			if ( checkBowler == null ) {
 				BowlerFile.putBowlerInfo(
 						newPatron.getNick(),

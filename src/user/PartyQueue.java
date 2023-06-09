@@ -41,7 +41,7 @@ public class PartyQueue {
     public static void addPartyQueue(ControlDesk controlDesk, Vector partyNicks) {
         Vector partyBowlers = new Vector();
         for (Object partyNick : partyNicks) {
-            Bowler newBowler = BowlerFile.findBowlerByName(((String) partyNick));
+            Bowler newBowler = BowlerFile.getBowlerInfoByName(((String) partyNick));
             partyBowlers.add(newBowler);
         }
         Party newParty = new Party(partyBowlers);
