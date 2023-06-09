@@ -41,7 +41,6 @@ public class Bowler implements BowlerInterface, Serializable {
         return nickName;  
 
     }
-
 	public String getFullName ( ) {
 			return fullName;
 	}

@@ -19,12 +19,12 @@ public class PartyQueue {
     public static void assignLane(ControlDesk controlDesk) {
         Iterator it = controlDesk.lanes.iterator();
 
-        while (it.hasNext() && controlDesk.partyQueue.hasMoreElements()) {
+        while (it.hasNext() && controlDesk.partyQueue.isEmpty()) {
             Lane curLane = (Lane) it.next();
 
             if (!curLane.scoreCalculator.partyAssigned) {
                 System.out.println("ok... assigning this party");
-                ((Party) controlDesk.partyQueue.next()).assignParty(curLane);
+                ((Party) controlDesk.partyQueue.poll()).assignParty(curLane);
             }
         }
 
@@ -59,9 +59,9 @@ public class PartyQueue {
 
     public static Vector getPartyQueue(ControlDesk controlDesk) {
         Vector displayPartyQueue = new Vector();
-        for (int i = 0; i < controlDesk.partyQueue.asVector().size(); i++ ) {
+        for (int i = 0; i < controlDesk.partyQueue.getVector().size(); i++ ) {
             String nextParty =
-                    ((Bowler) ((Party) controlDesk.partyQueue.asVector().get( i ) ).getMembers()
+                    ((Bowler) ((Party) controlDesk.partyQueue.getVector().get( i ) ).getMembers()
                             .get(0))
                             .getNickName() + "'s Party";
             displayPartyQueue.addElement(nextParty);

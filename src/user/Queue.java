@@ -21,7 +21,7 @@ public class Queue {
 		v = new Vector();
 	}
 	
-	public Object next() {
+	public Object poll() {
 		return v.remove(0);
 	}
 
@@ -29,11 +29,11 @@ public class Queue {
 		v.addElement(o);
 	}
 	
-	public boolean hasMoreElements() {
+	public boolean isEmpty() {
 		return v.size() != 0;
 	}
 
-	public Vector asVector() {
+	public Vector getVector() {
 		return v;
 	}
 	
