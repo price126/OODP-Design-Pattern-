@@ -1,4 +1,5 @@
-package control;/* control.ControlDeskEvent.java
+package control;
+/* control.ControlDeskEvent.java
  *
  *  Version:
  *  		$Id$

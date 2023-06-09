@@ -1,4 +1,5 @@
-package user;/* BowlerFile.java
+package user;
+/* BowlerFile.java
  *
  *  Version:
  *  		$Id$

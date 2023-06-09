@@ -62,14 +62,13 @@ public class ScoreCalculator implements Serializable {
         LaneSubscriber.publish(lane,lane.lanePublish());
     }
 
-    public boolean isSpareCount(int[] curScore, int i, int current){
-         return (i % 2 == 1 && curScore[i - 1] + curScore[i] == 10 && i < current - 1);
-    }
-
     public boolean isStrikeCount(int[] curScore, int i, int current){
          return (i < current && i % 2 == 0 && curScore[i] == 10);
     }
 
+    public boolean isSpareCount(int[] curScore, int i, int current){
+        return (i % 2 == 1 && curScore[i - 1] + curScore[i] == 10 && i < current - 1);
+    }
 
     public void countScore18(int bowlIndex, int i, int[] curScore){
          if(i == 18){

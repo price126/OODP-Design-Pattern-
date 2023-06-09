@@ -1,4 +1,5 @@
-package control;/* control.ControlDesk.java
+package control;
+/* control.ControlDesk.java
  *
  *  Version:
  *  		$Id$

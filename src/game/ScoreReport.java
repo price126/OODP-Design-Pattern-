@@ -1,4 +1,5 @@
-package game; /**
+package game;
+/**
  * 
  * SMTP implementation based on code by R?al Gagnon mailto:real@rgagnon.com
  * 

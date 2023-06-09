@@ -1,4 +1,5 @@
-package viewer;/* viewer.ControlDeskView.java
+package viewer;
+/* viewer.ControlDeskView.java
  *
  *  Version:
  *			$Id$

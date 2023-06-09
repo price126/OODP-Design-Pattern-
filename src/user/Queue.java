@@ -1,4 +1,5 @@
-package user;/* user.Queue.java
+package user;
+/* user.Queue.java
  *
  *  Version
  *  $Id$

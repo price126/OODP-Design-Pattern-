@@ -1,4 +1,5 @@
-package viewer;/*
+package viewer;
+/*
  *  constructs a prototype Lane View
  *
  */

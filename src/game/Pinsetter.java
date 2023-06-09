@@ -1,4 +1,5 @@
-package game;/*
+package game;
+/*
  * Pinsetter.java
  *
  * Version:

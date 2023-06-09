@@ -1,4 +1,5 @@
-package game;/*  $Id$
+package game;
+/*  $Id$
  *
  *  Revisions:
  *    $Log: PinsetterEvent.java,v $

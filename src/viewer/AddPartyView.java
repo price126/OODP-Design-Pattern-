@@ -1,4 +1,5 @@
-package viewer;/* viewer.AddPartyView.java
+package viewer;
+/* viewer.AddPartyView.java
  *
  *  Version:
  * 		 $Id$

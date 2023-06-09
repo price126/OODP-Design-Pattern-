@@ -1,4 +1,5 @@
-package user;/*
+package user;
+/*
  * Party.java
  *
  * Version:

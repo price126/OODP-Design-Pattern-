@@ -1,4 +1,5 @@
-package lane;/*  $Id$
+package lane;
+/*  $Id$
  *
  *  Revisions:
  *    $Log: LaneEvent.java,v $

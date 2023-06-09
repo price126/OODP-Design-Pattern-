@@ -1,4 +1,5 @@
-package user;/*
+package user;
+/*
  * Bowler.java
  *
  * Version:

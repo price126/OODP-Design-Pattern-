@@ -1,4 +1,5 @@
-package game; /**
+package game;
+/**
  *
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.

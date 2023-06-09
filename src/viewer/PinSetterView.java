@@ -1,4 +1,5 @@
-package viewer;/*
+package viewer;
+/*
  * viewer.PinSetterView/.java
  *
  * Version:
