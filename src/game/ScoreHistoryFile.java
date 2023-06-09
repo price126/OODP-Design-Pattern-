@@ -11,7 +11,7 @@ import java.io.*;
 
 public class ScoreHistoryFile {
 
-	private static final String SCOREHISTORY_DAT = "C:\\Users\\hp\\Desktop\\가마우지\\src\\game\\SCOREHISTORY.DAT";
+	private static final String SCOREHISTORY_DAT = "./src/game/SCOREHISTORY.DAT";
 
 	public static void addScore(String nick, String date, String score)
 			throws IOException {
